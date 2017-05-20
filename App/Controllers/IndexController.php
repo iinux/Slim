@@ -9,13 +9,17 @@
 namespace App\Controllers;
 
 
+use App\Models\Comment;
+
 class IndexController extends Controller
 {
     public function index()
     {
+        $comments = Comment::all();
+        dd($comments);
         $smarty = $this->getSmarty();
-        $smarty->assign('name', 'Jerry');
-        $smarty->display('smarty_test.tpl');
+        $smarty->assign('comments', ['a','b']);
+        $smarty->display('comments.tpl');
     }
 
 }
