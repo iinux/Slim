@@ -16,25 +16,33 @@
         _gaq.push(['_setAccount', 'UA-8634743-10'], ['_trackPageview']);
     </script>
     <script type="text/javascript">
-        (function() {
+        /*(function() {
             var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
             ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
             var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-        })();
+        })();*/
     </script>
 </head>
 <body>
 <div class="toolbar">
     <h1 id="pageTitle">iUI Demo</h1>
     <a id="backButton" class="button" href="#"></a>
+    <a class="button" href="#searchForm">Search</a>
 </div>
 
 <div id="home" class="panel" selected="true">
     {foreach $comments as $comment}
-    <fieldset>
-        <p class="normalText">{$comment}</p>
-    </fieldset>
+        {if (strpos($comment->content, 'http') !== 0)}
+            <fieldset>
+                <p class="normalText">{$comment->content}</p>
+            </fieldset>
+        {else}
+            <ul>
+                <li><a target="_blank" href="{$comment->content}">{$comment->content}</a></li>
+            </ul>
+        {/if}
     {/foreach}
+
 
 </div>
 

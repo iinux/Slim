@@ -13,12 +13,11 @@ use App\Models\Comment;
 
 class IndexController extends Controller
 {
-    public function index()
+    public function index($request, $response)
     {
         $comments = Comment::all();
-        dd($comments);
         $smarty = $this->getSmarty();
-        $smarty->assign('comments', ['a','b']);
+        $smarty->assign('comments', $comments);
         $smarty->display('comments.tpl');
     }
 
