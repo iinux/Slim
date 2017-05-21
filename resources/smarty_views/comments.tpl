@@ -3,11 +3,11 @@
 <head>
     <title>iUI Demo Site</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
-    <link rel="icon" type="image/png" href="iui/iui-favicon.png">
-    <link rel="apple-touch-icon" href="iui/iui-logo-touch-icon.png" />
-    <link rel="stylesheet" href="iui/iui.css" type="text/css" />
-    <link rel="stylesheet" title="Default" href="iui/t/default/default-theme.css"  type="text/css"/>
-    <link rel="stylesheet" href="css/iui-panel-list.css" type="text/css" />
+    <link rel="icon" type="image/png" href="/iui/iui-favicon.png">
+    <link rel="apple-touch-icon" href="/iui/iui-logo-touch-icon.png" />
+    <link rel="stylesheet" href="/iui/iui.css" type="text/css" />
+    <link rel="stylesheet" title="Default" href="/iui/t/default/default-theme.css"  type="text/css"/>
+    <link rel="stylesheet" href="/css/iui-panel-list.css" type="text/css" />
     <style type="text/css">
         .panel p.normalText { text-align: left;  padding: 0 10px 0 10px; }
     </style>
@@ -25,22 +25,16 @@
 </head>
 <body>
 <div class="toolbar">
-    <h1 id="pageTitle">iUI Demo</h1>
+    <h1 id="pageTitle">Note</h1>
     <a id="backButton" class="button" href="#"></a>
-    <a class="button" href="#searchForm">Search</a>
+    <a class="button" href="/comments/add">Add</a>
 </div>
 
 <div id="home" class="panel" selected="true">
     {foreach $comments as $comment}
-        {if (strpos($comment->content, 'http') !== 0)}
-            <fieldset>
-                <p class="normalText">{$comment->content}</p>
-            </fieldset>
-        {else}
-            <ul>
-                <li><a target="_blank" href="{$comment->content}">{$comment->content}</a></li>
-            </ul>
-        {/if}
+        <fieldset>
+            <p class="normalText">{$comment->content}【{$comment->ip}】【{$comment->created_at}】</p>
+        </fieldset>
     {/foreach}
 
 

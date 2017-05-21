@@ -22,8 +22,21 @@ class CommentController extends Controller
      */
     public function store($request, $response)
     {
-        $comment = Comment::create($request->getParams());
+        $data = $request->getParams();
+        $data['ip'] = $request->getServerParams()['REMOTE_ADDR'];
+        $comment = Comment::create($data);
         return $response->withJson(['code'=>0]);
+    }
+
+    /**
+     * @param Request $request
+     * @param Response $response
+     * @return mixed
+     */
+    public function storeView($request, $response)
+    {
+        $smarty = $this->getSmarty();
+        $smarty->display('comments_add.tpl');
     }
 
 }
