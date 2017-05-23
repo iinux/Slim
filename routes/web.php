@@ -13,4 +13,9 @@ $app->get('/hello/{name}', function ($request, $response, $args) {
 
 $app->get('/', '\App\Controllers\IndexController:index');
 $app->get('/comments/add', '\App\Controllers\CommentController:storeView');
+$app->get('/comments/{id}', '\App\Controllers\CommentController:showView');
+
+$app->get('/auth/login', '\App\Controllers\AuthController:loginView');
+$app->get('/auth/logout', '\App\Controllers\AuthController:logoutView');
+$app->post('/auth/check', '\App\Controllers\AuthController:checkView');
 

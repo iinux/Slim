@@ -21,6 +21,9 @@
             ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
             var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
         })();*/
+        function editComment($id) {
+            window.location = '/comments/' + $id;
+        }
     </script>
 </head>
 <body>
@@ -38,14 +41,23 @@
         {if ($comment->status == 10)}
             <fieldset>
                 {$comment->created_at->setToStringFormat('Y-m-d H:i')}
-                <p class="normalText">{$comment->content}<br />
-                    {$comment->ip}/{$comment->created_at}
-                </p>
+                {if (isset($smarty.session.user))}
+                    <p class="normalText" onclick="editComment({$comment->id})">{$comment->content}<br />
+                        {$comment->ip}/{$comment->created_at}
+                    </p>
+                {else}
+                    <p class="normalText">{$comment->content}<br />
+                        {$comment->ip}/{$comment->created_at}
+                    </p>
+                {/if}
             </fieldset>
         {/if}
     {/foreach}
     <ul>
         <li><a href="#top" id="bottom">Goto Top</a></li>
+    </ul>
+    <ul>
+        <li><a href="/auth/login">Login</a></li>
     </ul>
 </div>
 

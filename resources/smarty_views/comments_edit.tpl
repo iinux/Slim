@@ -4,15 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
-    <title>Comment Add</title>
+    <title>Comment Edit</title>
     <link rel="stylesheet" href="/css/weui.min.css"/>
     <script src="/js/zepto.min.js"></script>
     <script>
         function comments_add()
         {
             $.ajax({
-                type: 'POST',
-                url: '/api/comments',
+                type: 'PUT',
+                url: '/api/comments/{$id}',
                 // data to be added to query string:
                 data: { content: $('#content').val() },
                 // type of data we are expecting in return:
@@ -44,7 +44,7 @@
     <div class="weui-cells weui-cells_form">
         <div class="weui-cell">
             <div class="weui-cell__bd">
-                <textarea id='content' class="weui-textarea" placeholder="请输入文本" rows="3"></textarea>
+                <textarea id='content' class="weui-textarea" placeholder="请输入文本" rows="3">{$comment->content}</textarea>
                 <div class="weui-textarea-counter"><span>0</span>/200</div>
             </div>
         </div>

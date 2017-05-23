@@ -22,7 +22,7 @@ class IndexController extends Controller
      */
     public function index($request, $response, $args)
     {
-        $comments = Comment::orderBy('created_at', 'desc')->get();
+        $comments = Comment::orderBy('updated_at', 'desc')->get();
         $smarty = $this->getSmarty();
         $smarty->assign('comments', $comments);
         $smarty->display('comments.tpl');

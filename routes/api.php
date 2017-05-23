@@ -7,5 +7,6 @@
  */
 
 $app->post('/api/comments', '\App\Controllers\CommentController:store');
+$app->put('/api/comments/{id}', '\App\Controllers\CommentController:update');
 
 $app->post('/api/test-post', '\App\Controllers\IndexController:testPost');

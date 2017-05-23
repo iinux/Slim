@@ -31,6 +31,23 @@ class CommentController extends Controller
     /**
      * @param Request $request
      * @param Response $response
+     * @param array $args
+     * @return mixed
+     */
+    public function update($request, $response, $args)
+    {
+        /**
+         * @var Comment $comment
+         */
+        $comment = Comment::findOrFail($args['id']);
+        $comment->content = $request->getParam('content');
+        $comment->save();
+        return $response->withJson(['code'=>0]);
+    }
+
+    /**
+     * @param Request $request
+     * @param Response $response
      * @return mixed
      */
     public function storeView($request, $response)
@@ -39,4 +56,21 @@ class CommentController extends Controller
         $smarty->display('comments_add.tpl');
     }
 
+    /**
+     * @param Request $request
+     * @param Response $response
+     * @param array $args
+     * @return mixed
+     */
+    public function showView($request, $response, $args)
+    {
+        $commentId = $args['id'];
+        
+        $comment = Comment::findOrFail($commentId);
+        
+        $smarty = $this->getSmarty();
+        $smarty->assign('id', $commentId);
+        $smarty->assign('comment', $comment);
+        $smarty->display('comments_edit.tpl');
+    }
 }
