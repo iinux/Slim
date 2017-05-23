@@ -22,10 +22,22 @@ class IndexController extends Controller
      */
     public function index($request, $response, $args)
     {
-        $comments = Comment::all();
+        $comments = Comment::orderBy('created_at', 'desc')->get();
         $smarty = $this->getSmarty();
         $smarty->assign('comments', $comments);
         $smarty->display('comments.tpl');
+    }
+
+    /**
+     * @param Request $request
+     * @param Response $response
+     * @param $args
+     * @return mixed
+     */
+    public function testPost($request, $response, $args)
+    {
+        $response->withJson(['data' => $request->getParam('content')]);
+        return $response;
     }
 
 }

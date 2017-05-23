@@ -7,3 +7,5 @@
  */
 
 $app->post('/api/comments', '\App\Controllers\CommentController:store');
+
+$app->post('/api/test-post', '\App\Controllers\IndexController:testPost');

@@ -17,7 +17,7 @@
                 data: { content: $('#content').val() },
                 // type of data we are expecting in return:
                 dataType: 'json',
-                timeout: 300,
+                timeout: 3000,
                 context: $('body'),
                 success: function(data){
                     // this.append(data.project.html)

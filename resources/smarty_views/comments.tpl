@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>iUI Demo Site</title>
+    <title>Note</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
     <link rel="icon" type="image/png" href="/iui/iui-favicon.png">
     <link rel="apple-touch-icon" href="/iui/iui-logo-touch-icon.png" />
@@ -31,13 +31,22 @@
 </div>
 
 <div id="home" class="panel" selected="true">
+    <ul>
+        <li><a href="#bottom" id="top">Goto Bottom</a></li>
+    </ul>
     {foreach $comments as $comment}
-        <fieldset>
-            <p class="normalText">{$comment->content}【{$comment->ip}】【{$comment->created_at}】</p>
-        </fieldset>
+        {if ($comment->status == 10)}
+            <fieldset>
+                {$comment->created_at->setToStringFormat('Y-m-d H:i')}
+                <p class="normalText">{$comment->content}<br />
+                    {$comment->ip}/{$comment->created_at}
+                </p>
+            </fieldset>
+        {/if}
     {/foreach}
-
-
+    <ul>
+        <li><a href="#top" id="bottom">Goto Top</a></li>
+    </ul>
 </div>
 
 </body>
