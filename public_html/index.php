@@ -14,6 +14,7 @@ require_once '../routes/api.php';
 
 $config = require_once '../config/config.php';
 $app->addSettings($config);
+date_default_timezone_set('Asia/Shanghai');
 
 use Illuminate\Database\Capsule\Manager as Capsule;
 

@@ -10,14 +10,16 @@
     <script>
         function comments_add()
         {
+            var content = $('#content').val();
+            localStorage.setItem('commentTemp', content);
             $.ajax({
-                type: 'PUT',
-                url: '/api/comments/{$id}',
+                type: 'POST',
+                url: '/api/comments/{$id}/edit',
                 // data to be added to query string:
-                data: { content: $('#content').val() },
+                data: { content: content },
                 // type of data we are expecting in return:
                 dataType: 'json',
-                timeout: 3000,
+                timeout: 6000,
                 context: $('body'),
                 success: function(data){
                     // this.append(data.project.html)
@@ -28,6 +30,7 @@
                     setTimeout(function () {
                         $toast.fadeOut(100);
                     }, 2000);
+                    localStorage.removeItem('commentTemp');
                     window.location = '/'
                 },
                 error: function(xhr, type){
@@ -38,6 +41,11 @@
         function returnButton() {
             window.location = '/';
         }
+        $(function () {
+            if (localStorage.getItem('commentTemp') && confirm('want to load localStorage')) {
+                $('#content').val(localStorage.getItem('commentTemp'));
+            }
+        });
     </script>
 </head>
 <body>
@@ -58,7 +66,7 @@
         <div class="weui-mask_transparent"></div>
         <div class="weui-toast">
             <i class="weui-icon-success-no-circle weui-icon_toast"></i>
-            <p class="weui-toast__content">Added</p>
+            <p class="weui-toast__content">Changed</p>
         </div>
     </div>
     <!--end toast-->
