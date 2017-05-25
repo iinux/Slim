@@ -34,6 +34,9 @@
                     window.location = '/'
                 },
                 error: function(xhr, type){
+                    if (xhr.status == 403) {
+                        window.location = '/auth/login';
+                    }
                     alert('Ajax error!')
                 }
             })
