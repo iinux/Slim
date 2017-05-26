@@ -19,3 +19,5 @@ $app->get('/auth/login', '\App\Controllers\AuthController:loginView');
 $app->get('/auth/logout', '\App\Controllers\AuthController:logoutView');
 $app->post('/auth/check', '\App\Controllers\AuthController:checkView');
 
+$app->get('/search', '\App\Controllers\GoogleController:indexView');
+$app->post('/search', '\App\Controllers\GoogleController:searchView');

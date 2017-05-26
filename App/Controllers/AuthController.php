@@ -8,6 +8,7 @@
 
 namespace App\Controllers;
 
+use App\Models\User;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
@@ -28,8 +29,9 @@ class AuthController extends Controller
     {
         $ident = $request->getParam('ident');
         $password = $request->getParam('password');
-        if ($ident == 'admin' && $password == '98526') {
-            $_SESSION['user'] = 'admin';
+        $user = User::where('ident', $ident)->firstOrFail();
+        if (md5($password . $user->salt) == $user->password) {
+            $_SESSION['user'] = $ident;
             return $response->withRedirect('/');
         } else {
             $smarty = $this->getSmarty();
