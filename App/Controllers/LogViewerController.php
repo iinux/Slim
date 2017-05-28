@@ -9,7 +9,7 @@ class LogViewerController extends Controller
 {
     protected $request;
 
-    public function __construct ()
+    public function __construct()
     {
         $this->request = $this->getIlluminateRequest();
         parent::__construct();
@@ -28,13 +28,33 @@ class LogViewerController extends Controller
         }
 
         if ($this->request->input('dl')) {
-            return $this->download(LaravelLogViewer::pathToLogFile(base64_decode($this->request->input('dl'))));
+            // return $this->download(LaravelLogViewer::pathToLogFile(base64_decode($this->request->input('dl'))));
+            $fileName = base64_decode($this->request->input('dl'));
+            $filePath = LaravelLogViewer::pathToLogFile($fileName);
+            $fp = fopen($filePath, "r");
+            $fileSize = filesize($filePath);
+            //下载文件需要用到的头
+            $response = $response->withAddedHeader("Content-type", "text/html;charset=utf-8")
+                ->withAddedHeader("Content-type", "application/octet-stream")
+                ->withAddedHeader("Accept-Ranges", "bytes")
+                ->withAddedHeader("Accept-Length:", $fileSize)
+                ->withAddedHeader("Content-Disposition", "attachment; filename=$fileName");
+            $buffer = 1024;
+            $fileCount = 0;
+            //向浏览器返回数据
+            while (!feof($fp) && $fileCount < $fileSize) {
+                $fileCon = fread($fp, $buffer);
+                $fileCount += $buffer;
+                $response->write($fileCon);
+            }
+            fclose($fp);
+            return $response;
         } elseif ($this->request->has('del')) {
             app('files')->delete(LaravelLogViewer::pathToLogFile(base64_decode($this->request->input('del'))));
             // return $this->redirect($this->request->url());
             return $response->withRedirect($this->request->url());
         } elseif ($this->request->has('delall')) {
-            foreach(LaravelLogViewer::getFiles(true) as $file){
+            foreach (LaravelLogViewer::getFiles(true) as $file) {
                 app('files')->delete(LaravelLogViewer::pathToLogFile($file));
             }
             // return $this->redirect($this->request->url());
@@ -42,8 +62,8 @@ class LogViewerController extends Controller
         }
 
         $response->write(app('view')->make('laravel-log-viewer.log', [
-            'logs' => LaravelLogViewer::all(),
-            'files' => LaravelLogViewer::getFiles(true),
+            'logs'         => LaravelLogViewer::all(),
+            'files'        => LaravelLogViewer::getFiles(true),
             'current_file' => LaravelLogViewer::getFileName()
         ]));
     }
