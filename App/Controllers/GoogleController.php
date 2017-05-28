@@ -48,11 +48,11 @@ class GoogleController extends Controller
         info($log);
 
         $url = "http://www.google.com.hk/search?" . $queryString;
-        $this_header = array(
+        $thisHeader = array(
             "Accept-Language: zh-CN,zh;q=0.8"
         );
         $ch = curl_init();
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $this_header);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $thisHeader);
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);//设置是将结果保存到字符串中还是输出到屏幕上，1表示将结果保存到字符串
         curl_setopt($ch, CURLOPT_HEADER, 0);//显示返回的Header区域内容
