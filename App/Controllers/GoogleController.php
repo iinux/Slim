@@ -22,9 +22,9 @@ class GoogleController extends Controller
      */
     public function indexView($request, $response, $args)
     {
-        if (count($request->getParams()) >= 1){
+        if (count($request->getParams()) >= 1) {
             $response->write($this->curlGoogle(http_build_query($request->getParams())));
-            return ;
+            return;
         }
         $smarty = $this->getSmarty();
         $smarty->assign('title', 'SearchEngine');
@@ -85,14 +85,25 @@ class GoogleController extends Controller
         //$info = curl_getinfo($ch);
         curl_close($ch);
 
-        $output = str_replace('/url?q=', '', $output);
-        $output = str_replace('search?', 'search.php?', $output);
-        $output = str_replace('action="/search"', 'action="/search.php"', $output);
+        $output = str_replace('<a href="', '<a target="_blank" href="', $output);
 
         $output = mb_convert_encoding($output, 'utf-8', 'gbk'); //加上这行
 
         //返回获得的数据
         //$str = gzdecode($output);
         return $output;
+    }
+
+    /**
+     * @param Request $request
+     * @param Response $response
+     * @param array $args
+     * @return mixed
+     */
+    public function url($request, $response, $args)
+    {
+        $q = $request->getParam('q');
+        info("google search click redirect to $q");
+        return $response->withRedirect($q);
     }
 }
