@@ -14,6 +14,7 @@ return [
 	*/
 
 	'debug' => true,//env('APP_DEBUG'),
+	// 'env' => 'local',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -114,6 +115,8 @@ return [
 		 * Laravel Framework Service Providers...
 		 */
 		'Illuminate\Database\DatabaseServiceProvider',
+		'Illuminate\View\ViewServiceProvider',
+		'Illuminate\Filesystem\FilesystemServiceProvider',
 		/*
 		'Illuminate\Foundation\Providers\ArtisanServiceProvider',
 		'Illuminate\Auth\AuthServiceProvider',
@@ -123,7 +126,6 @@ return [
 		'Illuminate\Routing\ControllerServiceProvider',
 		'Illuminate\Cookie\CookieServiceProvider',
 		'Illuminate\Encryption\EncryptionServiceProvider',
-		'Illuminate\Filesystem\FilesystemServiceProvider',
 		'Illuminate\Foundation\Providers\FoundationServiceProvider',
 		'Illuminate\Hashing\HashServiceProvider',
 		'Illuminate\Mail\MailServiceProvider',
@@ -135,7 +137,6 @@ return [
 		'Illuminate\Session\SessionServiceProvider',
 		'Illuminate\Translation\TranslationServiceProvider',
 		'Illuminate\Validation\ValidationServiceProvider',
-		'Illuminate\View\ViewServiceProvider',
 		*/
 
 		/*

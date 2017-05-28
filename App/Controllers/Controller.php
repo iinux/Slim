@@ -9,9 +9,12 @@
 namespace App\Controllers;
 
 use Smarty;
+use Illuminate\Http\Request as IlluminateRequest;
 
 class Controller
 {
+    protected $illuminateRequest;
+    
     public function __construct()
     {
         session_start();
@@ -28,6 +31,15 @@ class Controller
         }
 
         return $this->smarty;
+    }
+    
+    public function getIlluminateRequest()
+    {
+        if (is_null($this->illuminateRequest)) {
+            $this->illuminateRequest = IlluminateRequest::capture();
+        }
+        
+        return $this->illuminateRequest;
     }
 
 }

@@ -35,6 +35,7 @@
         "nikic/fast-route": "^1.0",
         "psr/container": "^1.0",
         "smarty/smarty": "*",
+        "rap2hpoutre/laravel-log-viewer": "*",
         "laravel/framework": "*"
     },
     "require-dev": {

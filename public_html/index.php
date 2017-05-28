@@ -64,7 +64,8 @@ if (false) {
         $request = Illuminate\Http\Request::capture()
     );
 } else {
+    // $request = Illuminate\Http\Request::capture();
+    // $illuminateApp->instance('request', $request);
     $kernel->bootstrap();
 }
-
 $app->run();

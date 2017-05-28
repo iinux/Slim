@@ -22,3 +22,5 @@ $app->post('/auth/check', '\App\Controllers\AuthController:checkView');
 $app->get('/search', '\App\Controllers\GoogleController:indexView');
 $app->get('/url', '\App\Controllers\GoogleController:url');
 $app->post('/search', '\App\Controllers\GoogleController:searchView');
+
+$app->get('/logs', '\App\Controllers\LogViewerController:index');
