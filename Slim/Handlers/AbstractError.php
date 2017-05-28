@@ -42,7 +42,7 @@ abstract class AbstractError extends AbstractHandler
         }
 
         $message = 'Slim Application Error:' . PHP_EOL;
-        $message .= 'Time: ' . date('Y-m-d H:i:s') . PHP_EOL;
+        // $message .= 'Time: ' . date('Y-m-d H:i:s') . PHP_EOL;
         $message .= $this->renderThrowableAsText($throwable);
         while ($throwable = $throwable->getPrevious()) {
             $message .= PHP_EOL . 'Previous error:' . PHP_EOL;
@@ -95,6 +95,8 @@ abstract class AbstractError extends AbstractHandler
      */
     protected function logError($message)
     {
+        app('log')->error($message);
+        return;
         $date = date('Y-m-d');
         error_log($message, 3, "../storage/logs/php_errors-$date.log");
     }
