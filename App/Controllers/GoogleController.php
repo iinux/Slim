@@ -22,6 +22,10 @@ class GoogleController extends Controller
      */
     public function indexView($request, $response, $args)
     {
+        if (count($request->getParams()) >= 1){
+            $response->write($this->curlGoogle(http_build_query($request->getParams())));
+            return ;
+        }
         $smarty = $this->getSmarty();
         $smarty->assign('title', 'SearchEngine');
         $smarty->assign('headerTitle', 'Perorsoft Search Engine(PHP Version)');
