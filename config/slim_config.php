@@ -7,5 +7,12 @@
  */
 
 return [
-    'displayErrorDetails' => true,
+    'displayErrorDetails'               => true,
+    //'routerCacheFile'                   => __DIR__ . '/../bootstrap/cache/routes.php',
+    'routerCacheFile'                   => false,
+    'httpVersion'                       => '1.1',
+    'responseChunkSize'                 => 4096,
+    'outputBuffering'                   => 'append',
+    'determineRouteBeforeAppMiddleware' => false,
+    'addContentLengthHeader'            => true,
 ];

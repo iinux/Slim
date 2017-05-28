@@ -6,14 +6,19 @@
  * Time: 22:17
  */
 
+use App\Http\Middleware\Authenticate;
+
 $app->get('/hello/{name}', function ($request, $response, $args) {
     $response->write("Hello, " . $args['name']);
     return $response;
 });
 
 $app->get('/', '\App\Controllers\IndexController:index');
-$app->get('/comments/add', '\App\Controllers\CommentController:storeView');
-$app->get('/comments/{id}', '\App\Controllers\CommentController:showView');
+
+$app->group('/comments', function () use ($app) {
+    $app->get('/add', '\App\Controllers\CommentController:storeView');
+    $app->get('/{id}', '\App\Controllers\CommentController:showView');
+})->add(Authenticate::class);
 
 $app->get('/auth/login', '\App\Controllers\AuthController:loginView');
 $app->get('/auth/logout', '\App\Controllers\AuthController:logoutView');
@@ -23,4 +28,6 @@ $app->get('/search', '\App\Controllers\GoogleController:indexView');
 $app->get('/url', '\App\Controllers\GoogleController:url');
 $app->post('/search', '\App\Controllers\GoogleController:searchView');
 
-$app->get('/logs', '\App\Controllers\LogViewerController:index');
+$app->group('', function () use ($app) {
+    $app->get('/logs', '\App\Controllers\LogViewerController:index');
+})->add(Authenticate::class);

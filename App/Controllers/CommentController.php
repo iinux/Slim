@@ -22,9 +22,6 @@ class CommentController extends Controller
      */
     public function store($request, $response)
     {
-        if (empty($_SESSION['user'])) {
-            return $response->withStatus(403);
-        }
         $data = $request->getParams();
         $data['ip'] = $request->getServerParams()['REMOTE_ADDR'];
         $comment = Comment::create($data);
@@ -39,9 +36,6 @@ class CommentController extends Controller
      */
     public function update($request, $response, $args)
     {
-        if (empty($_SESSION['user'])) {
-            return $response->withStatus(403);
-        }
         /**
          * @var Comment $comment
          */

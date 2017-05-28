@@ -6,8 +6,12 @@
  * Time: 23:11
  */
 
-$app->post('/api/comments', '\App\Controllers\CommentController:store');
-$app->put('/api/comments/{id}', '\App\Controllers\CommentController:update');
-$app->post('/api/comments/{id}/edit', '\App\Controllers\CommentController:update');
+use App\Http\Middleware\Authenticate;
+
+$app->group('/api/comments', function () use ($app) {
+    $app->post('', '\App\Controllers\CommentController:store');
+    $app->put('/{id}', '\App\Controllers\CommentController:update');
+    $app->post('/{id}/edit', '\App\Controllers\CommentController:update');
+})->add(Authenticate::class);
 
 $app->post('/api/test-post', '\App\Controllers\IndexController:testPost');
