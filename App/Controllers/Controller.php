@@ -9,6 +9,7 @@
 namespace App\Controllers;
 
 use Smarty;
+use Slim\Http\Request;
 use Illuminate\Http\Request as IlluminateRequest;
 
 class Controller
@@ -17,6 +18,12 @@ class Controller
     
     public function __construct()
     {
+        /**
+         * @var Request $request
+         */
+        $request = slim_app('request');
+        $serverParams = $request->getServerParams();
+        info("{$serverParams['REMOTE_ADDR']}:{$serverParams['REMOTE_PORT']} visit {$request->getUri()}");
     }
 
     protected $smarty;
