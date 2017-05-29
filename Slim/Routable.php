@@ -93,9 +93,6 @@ abstract class Routable
      */
     public function add($callable)
     {
-        if (class_exists($callable)) {
-            $callable = [new $callable(), 'handle'];
-        }
         $this->middleware[] = new DeferredCallable($callable, $this->callableResolver);
         return $this;
     }

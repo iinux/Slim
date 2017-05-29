@@ -50,23 +50,36 @@ final class CallableResolver implements CallableResolverInterface
 
         if (!is_callable($toResolve) && is_string($toResolve)) {
             $class = $toResolve;
-            $method = '__invoke';
+            $methods = ['__invoke', 'handle'];
 
             // check for slim callable as "class:method"
             $callablePattern = '!^([^\:]+)\:([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)$!';
             if (preg_match($callablePattern, $toResolve, $matches)) {
                 $class = $matches[1];
-                $method = $matches[2];
+                // if you spell the method name wrong and the class has __invoke or handle method
+                // it will not report error, it not friendly for you debugging, so comment it
+                // array_unshift($methods, $matches[2]);
+                $methods = [$matches[2]];
             }
 
             if ($this->container instanceof ContainerInterface &&
                 $this->container->has($class)) {
-                $resolved = [$this->container->get($class), $method];
+                foreach ($methods as $method) {
+                    $resolved = [$this->container->get($class), $method];
+                    if (is_callable($resolved)) {
+                        break;
+                    }
+                }
             } else {
                 if (!class_exists($class)) {
                     throw new RuntimeException(sprintf('Callable %s does not exist', $class));
                 }
-                $resolved = [new $class($this->container), $method];
+                foreach ($methods as $method) {
+                    $resolved = [new $class($this->container), $method];
+                    if (is_callable($resolved)) {
+                        break;
+                    }
+                }
             }
         }
 

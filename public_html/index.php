@@ -16,6 +16,13 @@ $app->addSettings($config);
 
 session_start();
 
+$container = $app->getContainer();
+foreach ($config['routeMiddleware'] as $key => $value) {
+    $container["mw.$key"] = function () use ($value) {
+        return new $value();
+    };
+}
+
 require_once '../routes/web.php';
 require_once '../routes/api.php';
 

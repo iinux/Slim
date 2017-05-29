@@ -15,4 +15,7 @@ return [
     'outputBuffering'                   => 'append',
     'determineRouteBeforeAppMiddleware' => false,
     'addContentLengthHeader'            => true,
+    'routeMiddleware'                   => [
+        'auth' => \App\Http\Middleware\Authenticate::class,
+    ]
 ];

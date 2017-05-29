@@ -6,8 +6,6 @@
  * Time: 22:17
  */
 
-use App\Http\Middleware\Authenticate;
-
 $app->get('/hello/{name}', function ($request, $response, $args) {
     $response->write("Hello, " . $args['name']);
     return $response;
@@ -18,7 +16,7 @@ $app->get('/', '\App\Controllers\IndexController:index');
 $app->group('/comments', function () use ($app) {
     $app->get('/add', '\App\Controllers\CommentController:storeView');
     $app->get('/{id}', '\App\Controllers\CommentController:showView');
-})->add(Authenticate::class);
+})->add('mw.auth');
 
 $app->get('/auth/login', '\App\Controllers\AuthController:loginView');
 $app->get('/auth/logout', '\App\Controllers\AuthController:logoutView');
@@ -30,4 +28,4 @@ $app->post('/search', '\App\Controllers\GoogleController:searchView');
 
 $app->group('', function () use ($app) {
     $app->get('/logs', '\App\Controllers\LogViewerController:index');
-})->add(Authenticate::class);
+})->add('mw.auth');
