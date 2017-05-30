@@ -16,14 +16,17 @@ class Controller
 {
     protected $illuminateRequest;
     
-    public function __construct()
+    public function __construct($container)
     {
         /**
          * @var Request $request
          */
         $request = slim_app('request');
         $serverParams = $request->getServerParams();
-        info("{$serverParams['REMOTE_ADDR']}:{$serverParams['REMOTE_PORT']} visit {$request->getUri()}");
+        // except the aliyun website monitor ip
+        if (!in_array($serverParams['REMOTE_ADDR'], ['112.126.75.221', '42.96.189.63', '120.26.64.126'])) {
+            info("{$serverParams['REMOTE_ADDR']}:{$serverParams['REMOTE_PORT']} visit {$request->getUri()}");
+        }
     }
 
     protected $smarty;
