@@ -9,10 +9,10 @@ class LogViewerController extends Controller
 {
     protected $request;
 
-    public function __construct()
+    public function __construct($container)
     {
         $this->request = $this->getIlluminateRequest();
-        parent::__construct();
+        parent::__construct($container);
     }
 
     /**
