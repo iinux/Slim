@@ -24,7 +24,14 @@ class Controller
         $request = slim_app('request');
         $serverParams = $request->getServerParams();
         // except the aliyun website monitor ip
-        if (!in_array($serverParams['REMOTE_ADDR'], ['112.126.75.221', '42.96.189.63', '120.26.64.126'])) {
+        if (!in_array($serverParams['REMOTE_ADDR'], [
+            '112.126.75.221',
+            '42.96.189.63',
+            '120.26.64.126',
+            '182.92.69.212',
+            '120.27.47.144',
+            '121.43.107.174'
+        ])) {
             info("{$serverParams['REMOTE_ADDR']}:{$serverParams['REMOTE_PORT']} visit {$request->getUri()}");
         }
     }
