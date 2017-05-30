@@ -32,7 +32,11 @@ class Controller
             '120.27.47.144',
             '121.43.107.174'
         ])) {
-            info("{$serverParams['REMOTE_ADDR']}:{$serverParams['REMOTE_PORT']} visit {$request->getUri()}");
+            $ip = $serverParams['REMOTE_ADDR'];
+            $port = $serverParams['REMOTE_PORT'];
+            $uri = $request->getUri();
+            $userAgent = $request->getHeaderLine('HTTP_USER_AGENT');
+            info("$ip:$port visit 【{$uri}】【{$userAgent}】");
         }
     }
 
