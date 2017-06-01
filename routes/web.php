@@ -12,6 +12,7 @@ $app->get('/hello/{name}', function ($request, $response, $args) {
 });
 
 $app->get('/', '\App\Controllers\IndexController:index');
+$app->get('/statistic.js', '\App\Controllers\IndexController:statisticJs');
 
 $app->group('/comments', function () use ($app) {
     $app->get('/add', '\App\Controllers\CommentController:storeView');

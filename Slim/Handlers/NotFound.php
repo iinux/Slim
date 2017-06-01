@@ -8,6 +8,7 @@
  */
 namespace Slim\Handlers;
 
+use App\Controllers\Controller;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Slim\Http\Body;
@@ -53,6 +54,7 @@ class NotFound extends AbstractHandler
 
         $body = new Body(fopen('php://temp', 'r+'));
         $body->write($output);
+        Controller::logRequest($request, 'NotFoundException');
 
         return $response->withStatus(404)
                         ->withHeader('Content-Type', $contentType)

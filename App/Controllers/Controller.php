@@ -10,6 +10,7 @@ namespace App\Controllers;
 
 use Smarty;
 use Slim\Http\Request;
+use Psr\Http\Message\ServerRequestInterface;
 use Illuminate\Http\Request as IlluminateRequest;
 
 class Controller
@@ -22,21 +23,32 @@ class Controller
          * @var Request $request
          */
         $request = slim_app('request');
+        $this->logRequest($request);
+    }
+
+    /**
+     * @param Request|ServerRequestInterface $request
+     * @param string $appendMessage
+     */
+    public static function logRequest($request, $appendMessage = '')
+    {
         $serverParams = $request->getServerParams();
         // except the aliyun website monitor ip
-        if (!in_array($serverParams['REMOTE_ADDR'], [
+        $ip = $serverParams['REMOTE_ADDR'];
+        if (!in_array($ip, [
             '112.126.75.221',
             '42.96.189.63',
             '120.26.64.126',
             '182.92.69.212',
             '120.27.47.144',
-            '121.43.107.174'
+            '121.43.107.174',
+            '112.124.127.53',
+            '112.126.73.56',
         ])) {
-            $ip = $serverParams['REMOTE_ADDR'];
             $port = $serverParams['REMOTE_PORT'];
             $uri = $request->getUri();
             $userAgent = $request->getHeaderLine('HTTP_USER_AGENT');
-            info("$ip:$port visit 【{$uri}】【{$userAgent}】");
+            info("$ip:$port visit 【{$uri}】【{$userAgent}】{$appendMessage}");
         }
     }
 

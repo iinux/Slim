@@ -40,4 +40,15 @@ class IndexController extends Controller
         return $response;
     }
 
+    /**
+     * @param Request $request
+     * @param Response $response
+     * @param $args
+     * @return mixed
+     */
+    public function statisticJs($request, $response, $args)
+    {
+        $response->write("console.log('welcome');");
+    }
+
 }
