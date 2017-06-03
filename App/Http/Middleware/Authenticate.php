@@ -25,6 +25,7 @@ class Authenticate
             if ($request->getHeaderLine('X-Requested-With') == 'XMLHttpRequest') {
                 return $response->withStatus(403);
             } else {
+                $_SESSION['intended.url'] = $request->getUri();
                 return $response->withRedirect('/auth/login');
             }
         }

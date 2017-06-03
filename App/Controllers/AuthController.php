@@ -32,7 +32,13 @@ class AuthController extends Controller
         $user = User::where('ident', $ident)->firstOrFail();
         if (md5($password . $user->salt) == $user->password) {
             $_SESSION['user'] = $ident;
-            return $response->withRedirect('/');
+            if (isset($_SESSION['intended.url'])) {
+                $intendedUrl = $_SESSION['intended.url'];
+                unset($_SESSION['intended.url']);
+                return $response->withRedirect($intendedUrl);
+            } else {
+                return $response->withRedirect('/');
+            }
         } else {
             $smarty = $this->getSmarty();
             $smarty->assign('errors', ['ident or password error']);
