@@ -41,15 +41,9 @@
         {if ($comment->status == 10)}
             <fieldset>
                 {$comment->created_at->setToStringFormat('Y-m-d H:i')}
-                {if (isset($smarty.session.user))}
-                    <p class="normalText" onclick="editComment({$comment->id})">{$comment->content}<br />
-                        {$comment->ip}/{$comment->updated_at}
-                    </p>
-                {else}
-                    <p class="normalText">{$comment->content}<br />
-                        {$comment->ip}/{$comment->updated_at}
-                    </p>
-                {/if}
+                <p class="normalText" onclick="editComment({$comment->id})">{$comment->content}<br />
+                    {$comment->ip}/{$comment->updated_at}
+                </p>
             </fieldset>
         {/if}
     {/foreach}
