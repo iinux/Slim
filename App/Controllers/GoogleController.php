@@ -72,7 +72,7 @@ class GoogleController extends Controller
         curl_setopt($curlSession, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($curlSession, CURLOPT_URL, $url);
         curl_setopt($curlSession, CURLOPT_RETURNTRANSFER, 1);//设置是将结果保存到字符串中还是输出到屏幕上，1表示将结果保存到字符串
-        curl_setopt($curlSession, CURLOPT_HEADER, 0);//显示返回的Header区域内容
+        curl_setopt($curlSession, CURLOPT_HEADER, 1);//显示返回的Header区域内容
         // curl_setopt($curlSession, CURLOPT_BINARYTRANSFER, true) ;
         // curl_setopt($curlSession, CURLOPT_ENCODING, 'gzip,deflate');
         // curl_setopt($curlSession, CURLOPT_FOLLOWLOCATION,true);//使用自动跳转
@@ -93,6 +93,9 @@ class GoogleController extends Controller
 
         $output = curl_exec($curlSession);
         // $info = curl_getinfo($curlSession);
+        $headerSize = curl_getinfo($curlSession, CURLINFO_HEADER_SIZE);
+        $header = substr($output, 0, $headerSize);
+        $output = substr($output, $headerSize);
         if (curl_errno($curlSession)) {
             return 'Curl error: ' . curl_error($curlSession);
         }
