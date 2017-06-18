@@ -52,45 +52,54 @@ class GoogleController extends Controller
         info($log);
 
         $url = "http://www.google.com.hk/search?" . $queryString;
-        $thisHeader = array(
-            "Accept-Language: zh-CN,zh;q=0.8"
-        );
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $thisHeader);
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);//设置是将结果保存到字符串中还是输出到屏幕上，1表示将结果保存到字符串
-        curl_setopt($ch, CURLOPT_HEADER, 0);//显示返回的Header区域内容
-        //curl_setopt($ch, CURLOPT_BINARYTRANSFER, true) ;
-        //curl_setopt($ch, CURLOPT_ENCODING, 'gzip,deflate');
-        //curl_setopt($ch, CURLOPT_FOLLOWLOCATION,true);//使用自动跳转
-        //curl_setopt($ch, CURLOPT_USERAGENT,"Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 1.1.4322; .NET CLR 2.0.50727)");
-        //curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0); // 对认证证书来源的检查
-        //curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 1); // 从证书中检查SSL加密算法是否存在
-        //curl_setopt($ch, CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT']); // 模拟用户使用的浏览器
-        //curl_setopt($ch, CURLOPT_REFERER, $ref);
-        //curl_setopt($ch, CURLOPT_COOKIEFILE,$GLOBALS['cookie_file']); // 读取上面所储存的Cookie信息
-        //curl_setopt($ch, CURLOPT_COOKIEJAR, $GLOBALS['cookie_file']); // 存放Cookie信息的文件名称
-        //curl_setopt($ch, CURLOPT_TIMEOUT, 30); // 设置超时限制防止死循环
-        //if (curl_errno($curl)) {
-        //	echo 'Errno'.curl_error($curl);
-        //}
 
-        //$post_data = array ("username" => "bob","key" => "12345");
-        // post数据
-        //curl_setopt($ch, CURLOPT_POST, 1);
-        // post的变量
-        //curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
-
-        $output = curl_exec($ch);
-        //$info = curl_getinfo($ch);
-        curl_close($ch);
+        $output = $this->curl($url);
 
         $output = str_replace('<a href="', '<a target="_blank" href="', $output);
 
         $output = mb_convert_encoding($output, 'utf-8', 'gbk'); //加上这行
 
         //返回获得的数据
-        //$str = gzdecode($output);
+        return $output;
+    }
+
+    protected function curl($url)
+    {
+        $headers = array(
+            "Accept-Language: zh-CN,zh;q=0.8"
+        );
+        $curlSession = curl_init();
+        curl_setopt($curlSession, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($curlSession, CURLOPT_URL, $url);
+        curl_setopt($curlSession, CURLOPT_RETURNTRANSFER, 1);//设置是将结果保存到字符串中还是输出到屏幕上，1表示将结果保存到字符串
+        curl_setopt($curlSession, CURLOPT_HEADER, 0);//显示返回的Header区域内容
+        // curl_setopt($curlSession, CURLOPT_BINARYTRANSFER, true) ;
+        // curl_setopt($curlSession, CURLOPT_ENCODING, 'gzip,deflate');
+        // curl_setopt($curlSession, CURLOPT_FOLLOWLOCATION,true);//使用自动跳转
+        // $userAgent = "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 1.1.4322; .NET CLR 2.0.50727)";
+        // curl_setopt($curlSession, CURLOPT_USERAGENT, $userAgent);
+        curl_setopt($curlSession, CURLOPT_SSL_VERIFYPEER, 0); // 对认证证书来源的检查
+        // curl_setopt($curlSession, CURLOPT_SSL_VERIFYHOST, 1); // 从证书中检查SSL加密算法是否存在
+        // curl_setopt($curlSession, CURLOPT_REFERER, $ref);
+        // curl_setopt($curlSession, CURLOPT_COOKIEFILE,$GLOBALS['cookie_file']); // 读取上面所储存的Cookie信息
+        // curl_setopt($curlSession, CURLOPT_COOKIEJAR, $GLOBALS['cookie_file']); // 存放Cookie信息的文件名称
+        // curl_setopt($curlSession, CURLOPT_TIMEOUT, 30); // 设置超时限制防止死循环
+
+        // $postData = array ("username" => "bob","key" => "12345");
+        // post数据
+        // curl_setopt($curlSession, CURLOPT_POST, 1);
+        // post的变量
+        // curl_setopt($curlSession, CURLOPT_POSTFIELDS, $postData);
+
+        $output = curl_exec($curlSession);
+        // $info = curl_getinfo($curlSession);
+        if (curl_errno($curlSession)) {
+            return 'Curl error: ' . curl_error($curlSession);
+        }
+        curl_close($curlSession);
+
+        // $output = gzdecode($output);
+
         return $output;
     }
 
@@ -104,6 +113,16 @@ class GoogleController extends Controller
     {
         $q = $request->getParam('q');
         info("google search click redirect to $q");
+
+        $proxyUrlPrefix = [
+            'https://zh.wikipedia.org/zh-hans/',
+        ];
+        foreach ($proxyUrlPrefix as $item) {
+            if (strpos($q, $item) === 0) {
+                return $this->curl($q);
+            }
+        }
+
         return $response->withRedirect($q);
     }
 }
