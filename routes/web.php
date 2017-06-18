@@ -11,7 +11,6 @@ $app->get('/hello/{name}', function ($request, $response, $args) {
     return $response;
 });
 
-$app->get('/', '\App\Controllers\IndexController:index');
 $app->get('/statistic.js', '\App\Controllers\IndexController:statisticJs');
 
 $app->group('/comments', function () use ($app) {
@@ -28,5 +27,6 @@ $app->get('/url', '\App\Controllers\GoogleController:url');
 $app->post('/search', '\App\Controllers\GoogleController:searchView');
 
 $app->group('', function () use ($app) {
+    $app->get('/', '\App\Controllers\IndexController:index');
     $app->get('/logs', '\App\Controllers\LogViewerController:index');
 })->add('mw.auth');
