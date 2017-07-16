@@ -129,10 +129,14 @@ class GoogleController extends Controller
     public function url($request, $response, $args)
     {
         $q = $request->getParam('q');
+        if (empty($q)) {
+            $q = $request->getParam('url');
+        }
         info("google search click redirect to $q");
 
         $proxyUrlPrefix = [
-            'https://zh.wikipedia.org/zh-hans/',
+            'https://zh.wikipedia.org/',
+            'https://zh.m.wikipedia.org/',
         ];
         foreach ($proxyUrlPrefix as $item) {
             if (strpos($q, $item) === 0) {

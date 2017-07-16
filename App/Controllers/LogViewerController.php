@@ -11,8 +11,8 @@ class LogViewerController extends Controller
 
     public function __construct($container)
     {
-        $this->request = $this->getIlluminateRequest();
         parent::__construct($container);
+        $this->request = $this->getIlluminateRequest();
     }
 
     /**
