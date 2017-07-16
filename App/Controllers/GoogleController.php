@@ -28,9 +28,14 @@ class GoogleController extends Controller
         }
         $smarty = $this->getSmarty();
         $smarty->assign('title', 'SearchEngine');
-        $smarty->assign('headerTitle', 'Perorsoft Search Engine(PHP Version)');
         $smarty->assign('useGoogleFont', false);
-        $smarty->display('google_index.tpl');
+        if ($this->isMobile()) {
+            $smarty->assign('headerTitle', 'Perorsoft Search');
+            $smarty->display('google_index.m.tpl');
+        } else {
+            $smarty->assign('headerTitle', 'Perorsoft Search Engine(PHP Version)');
+            $smarty->display('google_index.tpl');
+        }
     }
 
     /**
@@ -67,7 +72,7 @@ class GoogleController extends Controller
 
     protected function curl($url)
     {
-        $serverParams = $this->request->getServerParams();
+        $serverParams = $this->serverParams;
         $headers = array(
             "Connection: {$serverParams['HTTP_CONNECTION']}",
 
