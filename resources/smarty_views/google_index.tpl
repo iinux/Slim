@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
     <title>{$title}</title>
     {if ($useGoogleFont) }
     <link href="https://fonts.googleapis.com/css?family=Architects+Daughter" rel="stylesheet" type="text/css">
@@ -76,7 +77,7 @@
 
     <div id="body">
         <form method="post" enctype="multipart/form-data" id="container" style="text-align: center;padding: 180px 0 180px 0;">
-            <input id="id_content" name="q" type="text" style="padding: 10px;" size="100">
+            <input id="id_content" name="q" type="text" style="padding: 10px;width: 80%">
             <input type="submit" value="Search" style="padding: 10px 40px 10px 40px;margin-left: 36px;">
         </form>
     </div>

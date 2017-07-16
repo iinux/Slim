@@ -15,15 +15,16 @@ use Illuminate\Http\Request as IlluminateRequest;
 
 class Controller
 {
+    /**
+     * @var Request $request
+     */
     protected $illuminateRequest;
+    protected $request;
     
     public function __construct($container)
     {
-        /**
-         * @var Request $request
-         */
-        $request = slim_app('request');
-        $this->logRequest($request);
+        $this->request = slim_app('request');
+        $this->logRequest($this->request);
     }
 
     /**

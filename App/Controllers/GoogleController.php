@@ -51,22 +51,36 @@ class GoogleController extends Controller
         $log = urldecode($log);
         info($log);
 
-        $url = "http://www.google.com.hk/search?" . $queryString;
+        $url = "https://www.google.com.hk/search?" . $queryString;
 
         $output = $this->curl($url);
 
         $output = str_replace('<a href="', '<a target="_blank" href="', $output);
+        $output = str_replace('http://mingshen.online/images/branding/googlelogo/2x/googlelogo_color_120x44dp.png',
+            '', $output);
 
-        $output = mb_convert_encoding($output, 'utf-8', 'gbk'); //加上这行
+        // $output = mb_convert_encoding($output, 'utf-8', 'gbk'); //加上这行
 
-        //返回获得的数据
+        // 返回获得的数据
         return $output;
     }
 
     protected function curl($url)
     {
+        $serverParams = $this->request->getServerParams();
         $headers = array(
-            "Accept-Language: zh-CN,zh;q=0.8"
+            "Connection: {$serverParams['HTTP_CONNECTION']}",
+
+            // sometime don't have cache-control
+            // "Cache-Control: {$serverParams['HTTP_CACHE_CONTROL']}",
+
+            "User-Agent: {$serverParams['HTTP_USER_AGENT']}",
+            "Accept: {$serverParams['HTTP_ACCEPT']}",
+
+            // can't use this line
+            // "Accept-Encoding: {$serverParams['HTTP_ACCEPT_ENCODING']}",
+
+            "Accept-Language: {$serverParams['HTTP_ACCEPT_LANGUAGE']}",
         );
         $curlSession = curl_init();
         curl_setopt($curlSession, CURLOPT_HTTPHEADER, $headers);
@@ -74,8 +88,8 @@ class GoogleController extends Controller
         curl_setopt($curlSession, CURLOPT_RETURNTRANSFER, 1);//设置是将结果保存到字符串中还是输出到屏幕上，1表示将结果保存到字符串
         curl_setopt($curlSession, CURLOPT_HEADER, 1);//显示返回的Header区域内容
         // curl_setopt($curlSession, CURLOPT_BINARYTRANSFER, true) ;
-        // curl_setopt($curlSession, CURLOPT_ENCODING, 'gzip,deflate');
-        // curl_setopt($curlSession, CURLOPT_FOLLOWLOCATION,true);//使用自动跳转
+        curl_setopt($curlSession, CURLOPT_ENCODING, 'gzip,deflate');
+        curl_setopt($curlSession, CURLOPT_FOLLOWLOCATION, true);//使用自动跳转
         // $userAgent = "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 1.1.4322; .NET CLR 2.0.50727)";
         // curl_setopt($curlSession, CURLOPT_USERAGENT, $userAgent);
         curl_setopt($curlSession, CURLOPT_SSL_VERIFYPEER, 0); // 对认证证书来源的检查
