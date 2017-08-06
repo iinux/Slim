@@ -80,7 +80,8 @@ class Controller
             $port = $serverParams['REMOTE_PORT'];
             $uri = $request->getUri();
             $userAgent = $request->getHeaderLine('HTTP_USER_AGENT');
-            info("$ip:$port visit 【{$uri}】【{$userAgent}】{$appendMessage}");
+            $refer = $serverParams['HTTP_REFERER'];
+            info("$ip:$port visit 【{$uri}】【{$userAgent}】【{$refer}】{$appendMessage}");
         }
     }
 
