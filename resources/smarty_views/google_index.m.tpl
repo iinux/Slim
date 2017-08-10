@@ -15,7 +15,7 @@
 
         body {
             background-color: #fff;
-            margin: 40px;
+            margin: 25px;
             font: 13px/20px normal Helvetica, Arial, sans-serif;
             color: #4F5155;
         }
@@ -50,40 +50,27 @@
             padding: 12px 10px 12px 10px;
         }
 
-        #body {
-            margin: 0 15px 0 15px;
-        }
-
         p.footer {
             text-align: right;
             font-size: 11px;
             border-top: 1px solid #D0D0D0;
             line-height: 32px;
             padding: 0 10px 0 10px;
-            margin: 20px 0 0 0;
-        }
-
-        #container {
-            margin: 10px;
-            border: 1px solid #D0D0D0;
-            box-shadow: 0 0 8px #D0D0D0;
         }
     </style>
 </head>
 <body>
 
-<div id="container">
-    <h1>{$headerTitle}</h1>
+<h1>{$headerTitle}</h1>
 
-    <div id="body">
-        <form method="post" enctype="multipart/form-data" id="container" style="text-align: center;padding: 180px 0 180px 0;">
-            <input id="id_content" name="q" type="text" style="padding: 10px;width: 80%">
-            <input type="submit" value="Search" style="padding: 10px 40px 10px 40px;margin-left: 36px;">
-        </form>
-    </div>
-
-    <p class="footer">@{date('Y')} Perorsoft</p>
+<div id="body">
+    <form method="post" enctype="multipart/form-data" style="text-align: center;padding: 120px 0 100px 0;">
+        <input id="id_content" name="q" type="text" style="padding: 10px;width: 80%">
+        <input type="submit" value="Search" style="padding: 10px 40px 10px 40px;margin-left: 36px;">
+    </form>
 </div>
+
+<p class="footer">@{date('Y')} Perorsoft</p>
 
 </body>
 </html>

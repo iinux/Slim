@@ -22,11 +22,12 @@ $app->get('/auth/login', '\App\Controllers\AuthController:loginView');
 $app->get('/auth/logout', '\App\Controllers\AuthController:logoutView');
 $app->post('/auth/check', '\App\Controllers\AuthController:checkView');
 
-$app->get('/search', '\App\Controllers\GoogleController:indexView');
-$app->get('/url', '\App\Controllers\GoogleController:url');
-$app->post('/search', '\App\Controllers\GoogleController:searchView');
-
 $app->group('', function () use ($app) {
     $app->get('/', '\App\Controllers\IndexController:index');
     $app->get('/logs', '\App\Controllers\LogViewerController:index');
+
+    $app->get('/search', '\App\Controllers\GoogleController:indexView');
+    $app->get('/url', '\App\Controllers\GoogleController:url');
+    $app->post('/url', '\App\Controllers\GoogleController:url');
+    $app->post('/search', '\App\Controllers\GoogleController:searchView');
 })->add('mw.auth');
