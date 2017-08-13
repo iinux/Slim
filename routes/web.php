@@ -31,3 +31,5 @@ $app->group('', function () use ($app) {
     $app->post('/url', '\App\Controllers\GoogleController:url');
     $app->post('/search', '\App\Controllers\GoogleController:searchView');
 })->add('mw.auth');
+
+$app->get('/qxw', '\App\Controllers\QxwController:indexView');

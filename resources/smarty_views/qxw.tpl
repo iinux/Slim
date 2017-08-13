@@ -38,11 +38,21 @@
             var options = {};
             // some effects have required parameters
             if (selectedEffect === "scale") {
-                options = {percent: 0};
+                options = {
+                    percent: 0
+                };
             } else if (selectedEffect === "transfer") {
-                options = {to: "#button", className: "ui-effects-transfer"};
+                options = {
+                    to: "#button",
+                    className: "ui-effects-transfer"
+                };
             } else if (selectedEffect === "size") {
-                options = {to: {width: 200, height: 60}};
+                options = {
+                    to: {
+                        width: 200,
+                        height: 60
+                    }
+                };
             }
 
             // run the effect
@@ -147,14 +157,8 @@
                     class="ui-icon ui-icon-newwin"></span>跳到最下</a></p>
     <div id="tabs">
         <ul>
-            <li><a href="#tabs-1">公共区</a></li>
-            <li><a href="#tabs-2">第二公共区</a></li>
-            <li><a href="#tabs-5">私人区</a></li>
-            <li><a href="#tabs-3">登录</a></li>
-            <li><a href="#tabs-4">随机密码生成器</a></li>
-            <li><a href="#tabs-6">访问者信息</a></li>
-            <li><a href="#tabs-7">文件上传</a></li>
-            <%--<% Request.LogonUserIdentity. %>--%>
+            <li><a href="#tabs-1">Links</a></li>
+            <li><a href="#tabs-2">随机密码生成器</a></li>
         </ul>
         <div id="tabs-1" style="margin-left: auto; margin-right: auto; text-align: center">
             <fieldset>
@@ -164,91 +168,63 @@
                 备注<input type="text" id="tbMisc" />
                 <button type="submit" class="btn btn-default">添加一行</button>
                 <input type="reset" value="重置"/>
-                <table>
-                    {foreach $notifications as $notification}
-                        <tr>
-                            <td>{$notification->id}</td>
-                            <td>{$notification->time}</td>
-                            <td>{$notification->content}</td>
-                            <td>{$notification->link}</td>
-                            <td>{$notification->misc}</td>
-                            <td>{$notification->category}</td>
-                        </tr>
-                    {/foreach}
-                </table>
             </fieldset>
+            <table>
+                {foreach $links as $link}
+                    <tr>
+                        {*<td>{$link->id}</td>*}
+                        <td title="{$link->time}">{date('Y-m-d', strtotime($link->time))}</td>
+                        <td>{$link->ip}</td>
+                        {if strlen($link->content) > 20 }
+                            <td title="{$link->content}">{$link->content|truncate:20:"...":TRUE}</td>
+                        {else}
+                            <td>{$link->content}</td>
+                        {/if}
+                        {if strpos($link->link, 'http') === 0 }
+                            <td><a href="{$link->link}">Link</a></td>
+                        {elseif strlen($link->link) > 20}
+                            <td title="{$link->link}">{$link->link|truncate:20:"...":TRUE}</td>
+                        {else}
+                            <td>{$link->link}</td>
+                        {/if}
+                        {if strlen($link->misc) > 20}
+                            <td title="{$link->misc}">{$link->misc|truncate:20:"...":TRUE}</td>
+                        {else}
+                            <td>{$link->misc}</td>
+                        {/if}
+                        {*<td>{$link->category}</td>*}
+                    </tr>
+                {/foreach}
+            </table>
         </div>
-        <div id="tabs-4" style="margin-left: auto; margin-right: auto; text-align: center">
-
+        <div id="tabs-2" style="margin-left: auto; margin-right: auto; text-align: center">
             <label><input type="number" name="bit">位数</label>
+            <br />
             <label><input type="radio" name="type">纯数字</label>
             <label><input type="radio" name="type">数字加字母</label>
             <label><input type="radio" name="type">数字加字符</label>
             <label><input type="radio" name="type">数字加符号加大小写</label>
-
+            <br />
             <button type="submit" class="btn btn-default">生成密码</button>
-            <label><input type="text" readonly id="password">密码</label>
+            <br />
+            <label>密码</label><input type="text" readonly id="password">
 
             <hr/>
 
             <table>
             {foreach $passwords as $password}
                 <tr>
-                    <td>{$password->id}</td>
-                    <td>{$password->time}</td>
+                    {*<td>{$password->id}</td>*}
+                    <td title="{$password->time}">{date('Y-m-d', strtotime($password->time))}</td>
+                    <td>{$password->ip}</td>
                     <td>{$password->password}</td>
                     <td>{$password->misc}</td>
                 </tr>
             {/foreach}
             </table>
             <br/>
-            <label><input type="text" id="passwordMisc">备注</label>
+            <label>备注</label><input type="text" id="passwordMisc">
             <button type="submit" class="btn btn-default">添加到数据库</button>
-        </div>
-        <div id="tabs-7">
-            <% System.IO.DirectoryInfo dir = new System.IO.DirectoryInfo(Request.PhysicalApplicationPath + "file\\"); ;
-            //不是目录
-            if (dir == null) return;
-
-            System.IO.FileSystemInfo[] files = dir.GetFileSystemInfos();
-            for (int i = 0; i < files.Length; i++)
-            {
-            System.IO.FileInfo file = files[i] as System.IO.FileInfo;
-            //是文件
-            if (file != null)
-            {
-            %><a href="<% =Request.ApplicationPath + " file/" + file.Name %>"><% =file.Name %></a>　
-            <%= file.Length %>&nbsp;Byte(s)　
-            <a href="delete_file.ashx?file=<%=file.Name %>">删除</a> <br/><%
-            }
-
-            } %>
-            <br/>
-            <FileUpload ID="FileUpload1"<//>
-            <Button ID="btnFileUpload" </Text="上传" OnClientClick="return checkLogin();"
-                        OnClick="btnFileUpload_Click"/>
-            <Label ID="lblFileUploadInfo" </Text="点击“上传”开始上传！"></Label>
-            <br/><br/>
-
-            地址：
-            <TextBox ID="txtDownloadFromURL" </Width="55%"></TextBox>
-            保存文件名：
-            <TextBox ID="txtSaveFileName"</></TextBox>
-            <Button ID="btnDownloadFromURL" </Text="从网络下载" OnClick="btnDownloadFromURL_Click"
-                        OnClientClick="return checkLogin();"/>
-            <p><%
-                foreach (System.IO.DriveInfo drive in System.IO.DriveInfo.GetDrives()){
-                try
-                {
-                Response.Write(drive.Name + " " + drive.AvailableFreeSpace + " Byte(s) <br/>");
-                }
-                catch (Exception e)
-                {
-                //Response.Write(e.Message + "<br/>");
-                break;
-                }
-                }
-                %></p>
         </div>
     </div>
 
