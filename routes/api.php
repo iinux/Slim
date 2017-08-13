@@ -18,4 +18,6 @@ $app->group('/api/qxw', function () use ($app) {
     $app->post('/links', '\App\Controllers\QxwController:storeLink');
     $app->put('/links/{id}', '\App\Controllers\QxwController:updateLink');
     $app->post('/links/{id}/edit', '\App\Controllers\QxwController:updateLink');
+
+    $app->post('/passwords', '\App\Controllers\QxwController:storePassword');
 })->add('mw.auth');

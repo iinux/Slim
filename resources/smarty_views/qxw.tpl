@@ -90,6 +90,8 @@
             localStorageKeyName = 'qxwCommentTemp'+'tabs2';
             if (localStorage.getItem(localStorageKeyName) && confirm('want to load localStorage')) {
                 data = JSON.parse(localStorage.getItem(localStorageKeyName));
+                randomPassword.value = data.content;
+                passwordMisc.value = data.misc;
             }
 
             var tabs = $("#tabs");
@@ -184,7 +186,7 @@
                 {foreach $links as $link}
                     <tr>
                         {*<td>{$link->id}</td>*}
-                        <td title="{$link->time}">{date('Y-m-d', strtotime($link->time))}</td>
+                        <td title="{$link->updated_at}">{date('Y-m-d', strtotime($link->updated_at))}</td>
                         <td>{$link->ip}</td>
                         {if strlen($link->content) > 30 }
                             <td title="{$link->content}">{$link->content|truncate:30:"...":TRUE}</td>
@@ -212,16 +214,16 @@
             </table>
         </div>
         <div id="tabs-2" style="margin-left: auto; margin-right: auto; text-align: center">
-            <label><input type="number" name="bit">位数</label>
+            <label><input type="number" name="randomBit">位数</label>
             <br/>
-            <label><input type="radio" name="type">纯数字</label>
-            <label><input type="radio" name="type">数字加字母</label>
-            <label><input type="radio" name="type">数字加字符</label>
-            <label><input type="radio" name="type">数字加符号加大小写</label>
+            <label><input type="radio" name="type" value="type1">纯数字</label>
+            <label><input type="radio" name="type" value="type2">数字加字母</label>
+            <label><input type="radio" name="type" value="type3">数字加字符</label>
+            <label><input type="radio" name="type" value="type4">数字加符号加大小写</label>
             <br/>
             <button type="submit" class="btn btn-default">生成密码</button>
             <br/>
-            <label>密码</label><input type="text" readonly id="password">
+            <label>密码</label><input type="text" id="randomPassword">
 
             <hr/>
 
@@ -229,7 +231,7 @@
                 {foreach $passwords as $password}
                     <tr>
                         {*<td>{$password->id}</td>*}
-                        <td title="{$password->time}">{date('Y-m-d', strtotime($password->time))}</td>
+                        <td title="{$password->updated_at}">{date('Y-m-d', strtotime($password->updated_at))}</td>
                         <td>{$password->ip}</td>
                         <td>{$password->password}</td>
                         <td>{$password->misc}</td>
@@ -238,7 +240,7 @@
             </table>
             <br/>
             <label>备注</label><input type="text" id="passwordMisc">
-            <button type="submit" class="btn btn-default">添加到数据库</button>
+            <button type="button" class="btn btn-default" onclick="op('/passwords', 'tabs2', randomPassword.value, '', passwordMisc.value)">添加到数据库</button>
         </div>
     </div>
 

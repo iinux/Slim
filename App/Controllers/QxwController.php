@@ -22,7 +22,7 @@ class QxwController extends Controller
     public function indexView($request, $response)
     {
         $links = Link::orderBy('updated_at', 'desc')->get();
-        $passwords = Password::orderBy('time', 'desc')->get();
+        $passwords = Password::orderBy('updated_at', 'desc')->get();
         $smarty = $this->getSmarty();
         $smarty->assign('links', $links);
         $smarty->assign('passwords', $passwords);
@@ -30,6 +30,10 @@ class QxwController extends Controller
         $linkId = $request->getParam('linkId');
         if ($linkId) {
             $smarty->assign('link', Link::findOrFail($linkId));
+        }
+        $passwordId = $request->getParam('passwordId');
+        if ($passwordId) {
+            $smarty->assign('password', Password::firstOrFail($passwordId));
         }
 
         $smarty->display('qxw.tpl');
@@ -69,4 +73,20 @@ class QxwController extends Controller
         return $response->withJson(['code'=>0]);
     }
 
+    /**
+     * @param Request $request
+     * @param Response $response
+     * @return mixed
+     */
+    public function storePassword($request, $response)
+    {
+        $data = $request->getParams();
+        $data['password'] = $data['content'];
+        unset($data['content']);
+        unset($data['link']);
+        $data['ip'] = $request->getServerParams()['REMOTE_ADDR'];
+        $data['user_agent'] = $request->getServerParams()['HTTP_USER_AGENT'];
+        $password = Password::create($data);
+        return $response->withJson(['code'=>0]);
+    }
 }
