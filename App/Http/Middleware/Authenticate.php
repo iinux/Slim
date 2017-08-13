@@ -21,7 +21,7 @@ class Authenticate
      */
     public function handle($request, $response, $next)
     {
-        if (empty($_SESSION['user'])) {
+        if (!static::isLogin()) {
             if ($request->getHeaderLine('X-Requested-With') == 'XMLHttpRequest') {
                 return $response->withStatus(403);
             } else {
@@ -32,5 +32,10 @@ class Authenticate
         $response = $next($request, $response);
 
         return $response;
+    }
+    
+    public static function isLogin()
+    {
+        return empty($_SESSION['user']) ? false : true;
     }
 }

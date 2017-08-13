@@ -24,6 +24,13 @@
         function editComment($id) {
             window.location = '/comments/' + $id;
         }
+        window.onload = function () {
+            var iWantUri = localStorage.getItem('i_want_uri');
+            if (iWantUri) {
+                localStorage.removeItem('i_want_uri');
+                window.location = iWantUri;
+            }
+        };
     </script>
 </head>
 <body>

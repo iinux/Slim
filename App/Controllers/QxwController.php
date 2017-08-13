@@ -8,6 +8,7 @@
 
 namespace App\Controllers;
 
+use App\Http\Middleware\Authenticate;
 use App\Models\Link;
 use App\Models\Password;
 use Slim\Http\Request;
@@ -22,7 +23,11 @@ class QxwController extends Controller
     public function indexView($request, $response)
     {
         $links = Link::orderBy('updated_at', 'desc')->get();
-        $passwords = Password::orderBy('updated_at', 'desc')->get();
+        if (Authenticate::isLogin()) {
+            $passwords = Password::orderBy('updated_at', 'desc')->get();
+        } else {
+            $passwords = [];
+        }
         $smarty = $this->getSmarty();
         $smarty->assign('links', $links);
         $smarty->assign('passwords', $passwords);
@@ -32,7 +37,7 @@ class QxwController extends Controller
             $smarty->assign('link', Link::findOrFail($linkId));
         }
         $passwordId = $request->getParam('passwordId');
-        if ($passwordId) {
+        if ($passwordId && Authenticate::isLogin()) {
             $smarty->assign('password', Password::firstOrFail($passwordId));
         }
 

@@ -69,6 +69,7 @@
                 error: function (xhr, type) {
                     if (xhr.status == 403) {
                         window.location = '/auth/login';
+                        localStorage.setItem('i_want_uri', window.location);
                     }
                     alert('Ajax error!')
                 }
@@ -79,6 +80,7 @@
             var randomBit = $('#randomBit');
             var randomBitValue = randomBit.val();
             if (randomBitValue) {
+                randomBit.css('background', 'white');
             } else {
                 randomBit.css('background', 'red');
                 return;
