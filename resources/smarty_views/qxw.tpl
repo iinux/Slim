@@ -170,10 +170,14 @@
         <div id="tabs-1" style="margin-left: auto; margin-right: auto; text-align: center">
             <fieldset>
                 <legend>快速添加</legend>
-                内容<input type="text" id="tbContent"/>
-                链接<input type="text" id="tbLink"/>
-                备注<input type="text" id="tbMisc"/>
-                <button type="button" onclick="op('/links', 'tabs1', tbContent.value, tbLink.value, tbMisc.value)" class="btn btn-default">添加一行</button>
+                内容<input type="text" id="tbContent" value="{$link->content|default:""}"/>
+                链接<input type="text" id="tbLink" value="{$link->link|default:""}"/>
+                备注<input type="text" id="tbMisc" value="{$link->misc|default:""}"/>
+                {if isset($link->id)}
+                    <button type="button" onclick="op('/links/{$link->id}/edit', 'tabs1', tbContent.value, tbLink.value, tbMisc.value)" class="btn btn-default">添加一行</button>
+                {else}
+                    <button type="button" onclick="op('/links', 'tabs1', tbContent.value, tbLink.value, tbMisc.value)" class="btn btn-default">添加一行</button>
+                {/if}
                 <input type="reset" value="重置"/>
             </fieldset>
             <table style="display: inline;">
@@ -201,6 +205,7 @@
                         {else}
                             <td>{$link->misc}</td>
                         {/if}
+                        <td><a class="button" href="/qxw?linkId={$link->id}">编辑</a></td>
                         {*<td>{$link->category}</td>*}
                     </tr>
                 {/foreach}

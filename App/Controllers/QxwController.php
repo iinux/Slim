@@ -21,11 +21,17 @@ class QxwController extends Controller
      */
     public function indexView($request, $response)
     {
-        $links = Link::orderBy('time', 'desc')->get();
+        $links = Link::orderBy('updated_at', 'desc')->get();
         $passwords = Password::orderBy('time', 'desc')->get();
         $smarty = $this->getSmarty();
         $smarty->assign('links', $links);
         $smarty->assign('passwords', $passwords);
+
+        $linkId = $request->getParam('linkId');
+        if ($linkId) {
+            $smarty->assign('link', Link::findOrFail($linkId));
+        }
+
         $smarty->display('qxw.tpl');
     }
 
