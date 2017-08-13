@@ -29,4 +29,38 @@ class QxwController extends Controller
         $smarty->display('qxw.tpl');
     }
 
+    /**
+     * @param Request $request
+     * @param Response $response
+     * @return mixed
+     */
+    public function storeLink($request, $response)
+    {
+        $data = $request->getParams();
+        $data['ip'] = $request->getServerParams()['REMOTE_ADDR'];
+        $data['user_agent'] = $request->getServerParams()['HTTP_USER_AGENT'];
+        $data['category'] = 1;
+        $link = Link::create($data);
+        return $response->withJson(['code'=>0]);
+    }
+
+    /**
+     * @param Request $request
+     * @param Response $response
+     * @param array $args
+     * @return mixed
+     */
+    public function updateLink($request, $response, $args)
+    {
+        /**
+         * @var Link $link
+         */
+        $link = Link::findOrFail($args['id']);
+        $link->content = $request->getParam('content');
+        $link->link = $request->getParam('link');
+        $link->misc = $request->getParam('misc');
+        $link->save();
+        return $response->withJson(['code'=>0]);
+    }
+
 }

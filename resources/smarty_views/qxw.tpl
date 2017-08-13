@@ -47,7 +47,51 @@
             $("#dialog").effect(selectedEffect, options, 500, callback);
         }
 
+        function op(uri, tabName, content, link, misc) {
+            var data = {
+                content: content,
+                link: link,
+                misc: misc
+            };
+            localStorage.setItem('qxwCommentTemp'+tabName, JSON.stringify(data));
+
+            $.ajax({
+                type: 'POST',
+                url: '/api/qxw'+uri,
+                // data to be added to query string:
+                data: data,
+                // type of data we are expecting in return:
+                dataType: 'json',
+                timeout: 6000,
+                context: $('body'),
+                success: function(data){
+                    localStorage.removeItem('qxwCommentTemp'+tabName);
+                    window.location = '/qxw'
+                },
+                error: function(xhr, type){
+                    if (xhr.status == 403) {
+                        window.location = '/auth/login';
+                    }
+                    alert('Ajax error!')
+                }
+            })
+        }
+
         $(function () {
+            var data;
+            var localStorageKeyName = 'qxwCommentTemp'+'tabs1';
+            if (localStorage.getItem(localStorageKeyName) && confirm('want to load localStorage')) {
+                data = JSON.parse(localStorage.getItem(localStorageKeyName));
+                console.log(data);
+                tbContent.value = data.content;
+                tbLink.value = data.link;
+                tbMisc.value = data.misc;
+            }
+            localStorageKeyName = 'qxwCommentTemp'+'tabs2';
+            if (localStorage.getItem(localStorageKeyName) && confirm('want to load localStorage')) {
+                data = JSON.parse(localStorage.getItem(localStorageKeyName));
+            }
+
             var tabs = $("#tabs");
             tabs.tabs({
                 //event: "mouseover"
@@ -69,6 +113,7 @@
 
             tabs.css("background", "springgreen");
             $("fieldset").css("background", "pink");
+            
             $("#go_to_head,#go_to_foot").hover(
                     function () {
                         $(this).addClass("ui-state-hover");
@@ -128,17 +173,17 @@
                 内容<input type="text" id="tbContent"/>
                 链接<input type="text" id="tbLink"/>
                 备注<input type="text" id="tbMisc"/>
-                <button type="submit" class="btn btn-default">添加一行</button>
+                <button type="button" onclick="op('/links', 'tabs1', tbContent.value, tbLink.value, tbMisc.value)" class="btn btn-default">添加一行</button>
                 <input type="reset" value="重置"/>
             </fieldset>
-            <table>
+            <table style="display: inline;">
                 {foreach $links as $link}
                     <tr>
                         {*<td>{$link->id}</td>*}
                         <td title="{$link->time}">{date('Y-m-d', strtotime($link->time))}</td>
                         <td>{$link->ip}</td>
-                        {if strlen($link->content) > 20 }
-                            <td title="{$link->content}">{$link->content|truncate:20:"...":TRUE}</td>
+                        {if strlen($link->content) > 30 }
+                            <td title="{$link->content}">{$link->content|truncate:30:"...":TRUE}</td>
                         {else}
                             <td>{$link->content}</td>
                         {/if}
@@ -175,7 +220,7 @@
 
             <hr/>
 
-            <table>
+            <table style="display: inline">
                 {foreach $passwords as $password}
                     <tr>
                         {*<td>{$password->id}</td>*}
