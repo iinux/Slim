@@ -21,9 +21,7 @@
             var selectedEffect = "shake";//$( "#effectTypes" ).val();
 
             // most effect types need no options passed by default
-            var options = {
-
-            };
+            var options = {};
             // some effects have required parameters
             if (selectedEffect === "scale") {
                 options = {
@@ -53,22 +51,22 @@
                 link: link,
                 misc: misc
             };
-            localStorage.setItem('qxwCommentTemp'+tabName, JSON.stringify(data));
+            localStorage.setItem('qxwCommentTemp' + tabName, JSON.stringify(data));
 
             $.ajax({
                 type: 'POST',
-                url: '/api/qxw'+uri,
+                url: '/api/qxw' + uri,
                 // data to be added to query string:
                 data: data,
                 // type of data we are expecting in return:
                 dataType: 'json',
                 timeout: 6000,
                 context: $('body'),
-                success: function(data){
-                    localStorage.removeItem('qxwCommentTemp'+tabName);
+                success: function (data) {
+                    localStorage.removeItem('qxwCommentTemp' + tabName);
                     window.location = '/qxw'
                 },
-                error: function(xhr, type){
+                error: function (xhr, type) {
                     if (xhr.status == 403) {
                         window.location = '/auth/login';
                     }
@@ -77,9 +75,55 @@
             })
         }
 
+        function generateRandomPassword() {
+            var randomBit = $('#randomBit');
+            var randomBitValue = randomBit.val();
+            if (randomBitValue) {
+            } else {
+                randomBit.css('background', 'red');
+                return;
+            }
+            var upperLetter, lowerLetter, number, char;
+            number = $('#randomPasswordType1').is(':checked');
+            lowerLetter = $('#randomPasswordType2').is(":checked");
+            upperLetter = $('#randomPasswordType3').is(":checked");
+            char = $('#randomPasswordType4').is(":checked");
+            if (!(number || lowerLetter || upperLetter || char)) {
+                alert('至少选一个');
+                return;
+            }
+            var result = '';
+            for (var i = 0; i < randomBitValue;) {
+                var c = Math.floor(Math.random() * 94) + 33;
+                console.log(String.fromCharCode(c));
+                if (c >= 48 && c <= 57 && number) {
+                    result += String.fromCharCode(c);
+                    i++;
+                }
+                else if (c >= 65 && c <= 90 && upperLetter) {
+                    result += String.fromCharCode(c);
+                    i++;
+                }
+                else if (c >= 65 && c <= 90 && !upperLetter && lowerLetter) {
+                    result += String.fromCharCode(c + 32);
+                    i++;
+                }
+                else if (c >= 97 && c <= 122 && lowerLetter) {
+                    result += String.fromCharCode(c);
+                    i++;
+                }
+                else if (/^[^\da-zA-Z]*$/.test(String.fromCharCode(c)) && char) {
+                    result += String.fromCharCode(c);
+                    i++;
+                }
+
+            }
+            $('#randomPassword').val(result);
+        }
+
         $(function () {
             var data;
-            var localStorageKeyName = 'qxwCommentTemp'+'tabs1';
+            var localStorageKeyName = 'qxwCommentTemp' + 'tabs1';
             if (localStorage.getItem(localStorageKeyName) && confirm('want to load localStorage')) {
                 data = JSON.parse(localStorage.getItem(localStorageKeyName));
                 console.log(data);
@@ -87,7 +131,7 @@
                 tbLink.value = data.link;
                 tbMisc.value = data.misc;
             }
-            localStorageKeyName = 'qxwCommentTemp'+'tabs2';
+            localStorageKeyName = 'qxwCommentTemp' + 'tabs2';
             if (localStorage.getItem(localStorageKeyName) && confirm('want to load localStorage')) {
                 data = JSON.parse(localStorage.getItem(localStorageKeyName));
                 randomPassword.value = data.content;
@@ -115,7 +159,7 @@
 
             tabs.css("background", "springgreen");
             $("fieldset").css("background", "pink");
-            
+
             $("#go_to_head,#go_to_foot").hover(
                     function () {
                         $(this).addClass("ui-state-hover");
@@ -176,9 +220,14 @@
                 链接<input type="text" id="tbLink" value="{$link->link|default:""}"/>
                 备注<input type="text" id="tbMisc" value="{$link->misc|default:""}"/>
                 {if isset($link->id)}
-                    <button type="button" onclick="op('/links/{$link->id}/edit', 'tabs1', tbContent.value, tbLink.value, tbMisc.value)" class="btn btn-default">添加一行</button>
+                    <button type="button"
+                            onclick="op('/links/{$link->id}/edit', 'tabs1', tbContent.value, tbLink.value, tbMisc.value)"
+                            class="btn btn-default">添加一行
+                    </button>
                 {else}
-                    <button type="button" onclick="op('/links', 'tabs1', tbContent.value, tbLink.value, tbMisc.value)" class="btn btn-default">添加一行</button>
+                    <button type="button" onclick="op('/links', 'tabs1', tbContent.value, tbLink.value, tbMisc.value)"
+                            class="btn btn-default">添加一行
+                    </button>
                 {/if}
                 <input type="reset" value="重置"/>
             </fieldset>
@@ -214,14 +263,14 @@
             </table>
         </div>
         <div id="tabs-2" style="margin-left: auto; margin-right: auto; text-align: center">
-            <label><input type="number" name="randomBit">位数</label>
+            <label><input type="number" name="randomBit" id="randomBit">位数</label>
             <br/>
-            <label><input type="radio" name="type" value="type1">纯数字</label>
-            <label><input type="radio" name="type" value="type2">数字加字母</label>
-            <label><input type="radio" name="type" value="type3">数字加字符</label>
-            <label><input type="radio" name="type" value="type4">数字加符号加大小写</label>
+            <label><input type="checkbox" id="randomPasswordType1">数字</label>
+            <label><input type="checkbox" id="randomPasswordType2">小写字母</label>
+            <label><input type="checkbox" id="randomPasswordType3">大写字母</label>
+            <label><input type="checkbox" id="randomPasswordType4">特殊符号</label>
             <br/>
-            <button type="submit" class="btn btn-default">生成密码</button>
+            <button type="button" class="btn btn-default" onclick="generateRandomPassword()">生成密码</button>
             <br/>
             <label>密码</label><input type="text" id="randomPassword">
 
@@ -240,7 +289,9 @@
             </table>
             <br/>
             <label>备注</label><input type="text" id="passwordMisc">
-            <button type="button" class="btn btn-default" onclick="op('/passwords', 'tabs2', randomPassword.value, '', passwordMisc.value)">添加到数据库</button>
+            <button type="button" class="btn btn-default"
+                    onclick="op('/passwords', 'tabs2', randomPassword.value, '', passwordMisc.value)">添加到数据库
+            </button>
         </div>
     </div>
 
