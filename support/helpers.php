@@ -27,3 +27,17 @@ if (!function_exists('slim_app')) {
             : $container->get($abstract);
     }
 }
+
+if (!function_exists('addOrdinalNumberSuffix')) {
+    function addOrdinalNumberSuffix($num) {
+        if (!in_array(($num % 100), sarray(11,12,13))){
+            switch ($num % 10) {
+                // Handle 1st, 2nd, 3rd
+                case 1:    return $num.'st';
+                case 2:    return $num.'nd';
+                case 3:    return $num.'rd';
+            }
+        }
+        return $num.'th';
+    }
+}
