@@ -33,3 +33,4 @@ $app->group('', function () use ($app) {
 })->add('mw.auth');
 
 $app->get('/qxw', '\App\Controllers\QxwController:indexView');
+$app->get('/eat', '\App\Controllers\EatController:which');
