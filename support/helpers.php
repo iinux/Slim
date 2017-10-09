@@ -41,3 +41,22 @@ if (!function_exists('addOrdinalNumberSuffix')) {
         return $num.'th';
     }
 }
+
+if (!function_exists('authUser')) {
+    function authUser($refresh = false)
+    {
+        static $authUser = null;
+        if (is_null($authUser)) {
+            $authUser = unserialize($_SESSION['eloquent']);
+        }
+        if ($authUser === false) {
+            return null;
+        } else {
+            if ($refresh) {
+                $authUser = \App\Models\User::findOrFail($authUser->id);
+                $_SESSION['eloquent'] = serialize($authUser);
+            }
+            return $authUser;
+        }
+    }
+}

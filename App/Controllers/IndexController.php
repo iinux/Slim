@@ -22,6 +22,9 @@ class IndexController extends Controller
      */
     public function index($request, $response, $args)
     {
+        if (!authUser()->hasRight('index')) {
+            return $response->write('forbidden');
+        }
         $comments = Comment::orderBy('updated_at', 'desc')->get();
         $smarty = $this->getSmarty();
         $smarty->assign('comments', $comments);

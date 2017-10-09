@@ -34,6 +34,7 @@ class AuthController extends Controller
             $user = User::where('ident', $ident)->firstOrFail();
             if (md5($password . $user->salt) == $user->password) {
                 $_SESSION['user'] = $ident;
+                $_SESSION['eloquent'] = serialize($user);
                 if (isset($_SESSION['intended.url'])) {
                     $intendedUrl = $_SESSION['intended.url'];
                     unset($_SESSION['intended.url']);
