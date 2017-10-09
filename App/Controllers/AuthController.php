@@ -9,6 +9,7 @@
 namespace App\Controllers;
 
 use App\Models\User;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
@@ -29,17 +30,23 @@ class AuthController extends Controller
     {
         $ident = $request->getParam('ident');
         $password = $request->getParam('password');
-        $user = User::where('ident', $ident)->firstOrFail();
-        if (md5($password . $user->salt) == $user->password) {
-            $_SESSION['user'] = $ident;
-            if (isset($_SESSION['intended.url'])) {
-                $intendedUrl = $_SESSION['intended.url'];
-                unset($_SESSION['intended.url']);
-                return $response->withRedirect($intendedUrl);
+        try {
+            $user = User::where('ident', $ident)->firstOrFail();
+            if (md5($password . $user->salt) == $user->password) {
+                $_SESSION['user'] = $ident;
+                if (isset($_SESSION['intended.url'])) {
+                    $intendedUrl = $_SESSION['intended.url'];
+                    unset($_SESSION['intended.url']);
+                    return $response->withRedirect($intendedUrl);
+                } else {
+                    return $response->withRedirect('/');
+                }
             } else {
-                return $response->withRedirect('/');
+                $smarty = $this->getSmarty();
+                $smarty->assign('errors', ['ident or password error']);
+                $smarty->display('login.tpl');
             }
-        } else {
+        } catch (ModelNotFoundException $e) {
             $smarty = $this->getSmarty();
             $smarty->assign('errors', ['ident or password error']);
             $smarty->display('login.tpl');
