@@ -5,13 +5,13 @@
  * Date: 2016/8/21
  * Time: 10:00
  */
-require '../vendor/autoload.php';
+require __DIR__.'/../vendor/autoload.php';
 
 $app = new Slim\App();
 
-require_once '../support/helpers.php';
+require_once __DIR__.'/../support/helpers.php';
 
-$config = require_once '../config/slim_config.php';
+$config = require_once __DIR__.'/../config/slim_config.php';
 $app->addSettings($config);
 
 session_start();
@@ -23,11 +23,11 @@ foreach ($config['routeMiddleware'] as $key => $value) {
     };
 }
 
-require_once '../routes/web.php';
-require_once '../routes/api.php';
+require_once __DIR__.'/../routes/web.php';
+require_once __DIR__.'/../routes/api.php';
 
 // date_default_timezone_set('Asia/Shanghai');
 
-require_once '../bootstrap/app.php';
+require_once __DIR__.'/../bootstrap/app.php';
 
 $app->run();
