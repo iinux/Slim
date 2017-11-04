@@ -58,5 +58,11 @@
         ],
         "phpunit": "php vendor/bin/phpunit",
         "phpcs": "php vendor/bin/phpcs"
+    },
+    "repositories": {
+        "packagist": {
+            "type": "composer",
+            "url": "https://packagist.phpcomposer.com"
+        }
     }
 }
