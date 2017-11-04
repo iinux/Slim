@@ -85,7 +85,9 @@ class GoogleController extends Controller
             // can't use this line
             // "Accept-Encoding: {$serverParams['HTTP_ACCEPT_ENCODING']}",
 
-            "Accept-Language: {$serverParams['HTTP_ACCEPT_LANGUAGE']}",
+            // "Accept-Language: {$serverParams['HTTP_ACCEPT_LANGUAGE']}",
+            // 如果有浏览器的Accept-Language是en-US, 会返回立陶宛语，可能是因为IP的原因
+            "Accept-Language: zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7,zh-TW;q=0.6",
         );
         $curlSession = curl_init();
         curl_setopt($curlSession, CURLOPT_HTTPHEADER, $headers);
