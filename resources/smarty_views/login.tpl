@@ -4,6 +4,12 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
     <title>Login</title>
+    <style type="text/css">
+        div {
+            top: auto !important;
+            min-height: 0 !important;
+        }
+    </style>
     <link rel="stylesheet" href="/iui/iui.css" type="text/css" />
     <link rel="stylesheet" href="/iui/t/default/default-theme.css"  type="text/css"/>
     <script type="application/x-javascript" src="/iui/iui.js"></script>
@@ -13,6 +19,9 @@
         }
         function returnButton() {
             window.location = '/';
+        }
+        function oauth_github() {
+            window.location = '/auth/oauth-login/github';
         }
     </script>
 </head>
@@ -56,6 +65,7 @@
         <a class="redButton" href="javascript:logout()">Log out</a>
     {/if}
     <a class="grayButton" href="javascript:returnButton()">Back</a>
+    <a class="whiteButton" href="javascript:oauth_github()">GitHub</a>
 </form>
 
 </body>

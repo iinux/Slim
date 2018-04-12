@@ -57,11 +57,11 @@ return [
 
 		'mysql' => [
 			'driver'    => 'mysql',
-			'host'      => env('DB_HOST', env('OPENSHIFT_MYSQL_DB_HOST', 'localhost')),
-			'port'      => env('DB_PORT', env('OPENSHIFT_MYSQL_DB_PORT', 3306)),
-			'database'  => env('DB_DATABASE', env('OPENSHIFT_APP_NAME', 'forge')),
-			'username'  => env('DB_USERNAME', env('OPENSHIFT_MYSQL_DB_USERNAME', 'forge')),
-			'password'  => env('DB_PASSWORD', env('OPENSHIFT_MYSQL_DB_PASSWORD', '')),
+			'host'      => env('DB_HOST', env('MYSQL_DB_HOST', 'localhost')),
+			'port'      => env('DB_PORT', env('MYSQL_DB_PORT', 3306)),
+			'database'  => env('DB_DATABASE', env('APP_NAME', 'forge')),
+			'username'  => env('DB_USERNAME', env('MYSQL_DB_USERNAME', 'forge')),
+			'password'  => env('DB_PASSWORD', env('MYSQL_DB_PASSWORD', '')),
 			'charset'   => 'utf8',
 			'collation' => 'utf8_unicode_ci',
 			'prefix'    => '',
@@ -69,11 +69,11 @@ return [
 
 		'pgsql' => [
 			'driver'   => 'pgsql',
-			'host'     => env('DB_HOST', env('OPENSHIFT_POSTGRESQL_DB_HOST', 'localhost')),
-			'port'     => env('DB_PORT', env('OPENSHIFT_POSTGRESQL_DB_PORT', 5432)),
-			'database' => env('DB_DATABASE', env('OPENSHIFT_APP_NAME', 'forge')),
-			'username' => env('DB_USERNAME', env('OPENSHIFT_POSTGRESQL_DB_USERNAME', 'forge')),
-			'password' => env('DB_PASSWORD', env('OPENSHIFT_POSTGRESQL_DB_PASSWORD', '')),
+			'host'     => env('DB_HOST', env('POSTGRESQL_DB_HOST', 'localhost')),
+			'port'     => env('DB_PORT', env('POSTGRESQL_DB_PORT', 5432)),
+			'database' => env('DB_DATABASE', env('APP_NAME', 'forge')),
+			'username' => env('DB_USERNAME', env('POSTGRESQL_DB_USERNAME', 'forge')),
+			'password' => env('DB_PASSWORD', env('POSTGRESQL_DB_PASSWORD', '')),
 			'charset'  => 'utf8',
 			'prefix'   => '',
 			'schema'   => 'public',

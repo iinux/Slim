@@ -16,6 +16,8 @@ return [
     'determineRouteBeforeAppMiddleware' => false,
     'addContentLengthHeader'            => true,
     'routeMiddleware'                   => [
-        'auth' => \App\Http\Middleware\Authenticate::class,
-    ]
+        'auth'            => \App\Http\Middleware\Authenticate::class,
+        'root-auth'       => \App\Http\Middleware\RootAuthenticate::class,
+        'secret-key-auth' => \App\Http\Middleware\SecretKeyAuthenticate::class,
+    ],
 ];

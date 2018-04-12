@@ -3,3 +3,8 @@ phpunit.xml
 vendor
 .idea
 clover.xml
+.env
+.env.*
+!.env.example
+storage/session/sess_*
+public_html/xjs

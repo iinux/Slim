@@ -8,6 +8,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\User;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
@@ -36,6 +37,15 @@ class Authenticate
     
     public static function isLogin()
     {
-        return empty($_SESSION['user']) ? false : true;
+        if (empty($_SESSION['user'])) {
+            return false;
+        }
+        $ident = $_SESSION['user'];
+        $user = User::where('ident', $ident)->first();
+        if (is_null($user)) {
+            unset($_SESSION['user']);
+            return false;
+        }
+        return true;
     }
 }

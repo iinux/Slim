@@ -12,6 +12,11 @@ $app->group('/api/comments', function () use ($app) {
     $app->post('/{id}/edit', '\App\Controllers\CommentController:update');
 })->add('mw.auth');
 
+$app->group('/api/common', function () use ($app) {
+    $app->post('/g-proxy', '\App\Controllers\Controller:gProxyServer');
+    $app->post('/remote-curl-proxy', '\App\Controllers\Controller:remoteCurlServer');
+})->add('mw.secret-key-auth');
+
 $app->post('/api/test-post', '\App\Controllers\IndexController:testPost');
 
 $app->group('/api/qxw', function () use ($app) {
@@ -21,3 +26,12 @@ $app->group('/api/qxw', function () use ($app) {
 
     $app->post('/passwords', '\App\Controllers\QxwController:storePassword');
 })->add('mw.auth');
+
+$app->group('/api/users', function () use ($app) {
+    $app->post('', '\App\Controllers\UserController:store');
+    $app->get('', '\App\Controllers\UserController:index');
+    $app->put('/{id}', '\App\Controllers\UserController:update');
+    $app->post('/{id}/edit', '\App\Controllers\UserController:update');
+    $app->delete('/{id}', '\App\Controllers\UserController:destroy');
+    $app->post('/{id}/delete', '\App\Controllers\UserController:destroy');
+})->add('mw.root-auth');

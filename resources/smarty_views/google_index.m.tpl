@@ -57,6 +57,54 @@
             line-height: 32px;
             padding: 0 10px 0 10px;
         }
+
+        .msfi {
+            background-color: #fff !important;
+            border-color: #c7d6f7;
+            border-style: solid;
+            border-width: 2px 1px 2px 2px;
+            padding: 0;
+            height: 38px;
+            border: 1px solid #d9d9d9 !important;
+            border-top: 1px solid silver !important;
+            width: 80%;
+            border-radius: 10px;
+            padding-left: 8px;
+            font-size: 18px;
+        }
+
+        .gb_Fa {
+            border: 1px solid #4285f4;
+            font-weight: bold;
+            padding: 10px 30px 10px 30px;
+            margin-top: 10px;
+            border-radius: 10px;
+            background-color: #4d90fe;
+            color: white;
+        }
+
+        table {
+            width: 80%;
+            display: inline-table;
+            font-family: '微软雅黑', '宋体', '黑体';
+            text-align: left;
+        }
+
+        td {
+            background-color: rgb(249,252,255);
+            height: 24px;
+            width: 535px;
+        }
+
+        td:hover {
+            background-color: rgb(168,213,252);
+            cursor: default;
+        }
+
+        #searchForm {
+            text-align: center;
+            padding: 120px 0 100px 0;
+        }
     </style>
 </head>
 <body>
@@ -64,13 +112,36 @@
 <h1>{$headerTitle}</h1>
 
 <div id="body">
-    <form method="post" enctype="multipart/form-data" style="text-align: center;padding: 120px 0 100px 0;">
-        <input id="id_content" name="q" type="text" style="padding: 10px;width: 80%">
-        <input type="submit" value="Search" style="padding: 10px 40px 10px 40px;margin-left: 36px;">
+    <form method="post" enctype="multipart/form-data" id="searchForm" action="{$formAction}">
+        <input id="searchKey" name="q" type="text" class="msfi" autocomplete="off">
+        <table cellpadding='2' cellspacing='0'>
+            <tbody>
+            <tr><td></td></tr>
+            <tr><td></td></tr>
+            <tr><td></td></tr>
+            <tr><td></td></tr>
+            <tr><td></td></tr>
+            <tr><td></td></tr>
+            <tr><td></td></tr>
+            <tr><td></td></tr>
+            <tr><td></td></tr>
+            <tr><td></td></tr>
+            </tbody>
+        </table>
+        <br />
+        {if $dns }
+            <input type="button" id="searchBtn" value="Search" class="gb_Fa">
+        {else}
+            <input type="submit" id="searchBtn" value="Search" class="gb_Fa">
+        {/if}
     </form>
 </div>
 
 <p class="footer">@{date('Y')} Perorsoft</p>
 
+{include 'google_script.tpl'}
+{if $dns }
+    {include 'base64submit.tpl'}
+{/if}
 </body>
 </html>

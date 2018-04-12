@@ -14,7 +14,7 @@ return [
     */
 
     'paths' => [
-        realpath(app()->resourcePath().DIRECTORY_SEPARATOR.'views'),
+        method_exists(app(), 'resourcePath') ? realpath(app()->resourcePath() . DIRECTORY_SEPARATOR . 'views') : __DIR__ . '/../resources/views',
     ],
 
     /*

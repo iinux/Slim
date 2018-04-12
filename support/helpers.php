@@ -10,8 +10,8 @@ if (!function_exists('slim_app')) {
     /**
      * Get the available slim container instance.
      *
-     * @param  string  $abstract
-     * @param  array   $parameters
+     * @param  string $abstract
+     * @param  array $parameters
      * @return mixed|\Illuminate\Foundation\Application
      */
     function slim_app($abstract = null, array $parameters = [])
@@ -29,16 +29,20 @@ if (!function_exists('slim_app')) {
 }
 
 if (!function_exists('addOrdinalNumberSuffix')) {
-    function addOrdinalNumberSuffix($num) {
-        if (!in_array(($num % 100), sarray(11,12,13))){
+    function addOrdinalNumberSuffix($num)
+    {
+        if (!in_array(($num % 100), sarray(11, 12, 13))) {
             switch ($num % 10) {
                 // Handle 1st, 2nd, 3rd
-                case 1:    return $num.'st';
-                case 2:    return $num.'nd';
-                case 3:    return $num.'rd';
+                case 1:
+                    return $num . 'st';
+                case 2:
+                    return $num . 'nd';
+                case 3:
+                    return $num . 'rd';
             }
         }
-        return $num.'th';
+        return $num . 'th';
     }
 }
 
@@ -58,5 +62,42 @@ if (!function_exists('authUser')) {
             }
             return $authUser;
         }
+    }
+}
+
+if (!function_exists('putenv')) {
+    function env($key, $default = null)
+    {
+        $value = getenv($key);
+
+        if ($value === false && isset($_SERVER[$key])) {
+            $value = $_SERVER[$key];
+        }
+
+        if ($value === false) {
+            return value($default);
+        }
+
+        switch (strtolower($value)) {
+            case 'true':
+            case '(true)':
+                return true;
+            case 'false':
+            case '(false)':
+                return false;
+            case 'empty':
+            case '(empty)':
+                return '';
+            case 'null':
+            case '(null)':
+                return;
+        }
+
+        preg_match('/"(.*)"/', $value, $matches);
+        if ($matches) {
+            return $matches[1];
+        }
+
+        return $value;
     }
 }
