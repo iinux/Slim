@@ -182,18 +182,33 @@ class Controller
     {
         $data = json_encode($data);
         if ($data === false) {
-            return 'error(' . json_last_error() . '):' . json_last_error_msg();
+            return 'json_encode error(' . json_last_error() . '):' . json_last_error_msg();
         }
         $data = gzencode($data, 9);
+        if ($data === false) {
+            return 'gzencode error';
+        }
         $data = base64_encode($data);
+        if ($data === false) {
+            return 'base64_encode error';
+        }
         return $data;
     }
 
     protected function unpack($data)
     {
         $data = base64_decode($data);
+        if ($data === false) {
+            dd("base64_decode error ($data)");
+        }
         $data = gzdecode($data);
+        if ($data === false) {
+            dd("gzdecode error ($data)");
+        }
         $data = json_decode($data, true);
+        if ($data === false) {
+            dd('json_decode error(' . json_last_error() . '):' . json_last_error_msg());
+        }
         return $data;
     }
 
