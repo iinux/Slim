@@ -281,7 +281,12 @@ class Controller
         // $output = gzdecode($output);
         if (env('G_PROXY')) {
             $data = json_decode($output);
-            $output = $this->unpack($data->data)['result'];
+            $output = $this->unpack($data->data);
+            if ($output['resultBase64']) {
+                $output = base64_decode($output['result']);
+            } else{
+                $output = $output['result'];
+            }
         }
 
         return $output;
@@ -299,11 +304,17 @@ class Controller
         $data = $this->unpack($data);
 
         $curlData = $this->curl($data['url'], $data['data']);
+        if (json_encode($curlData) === false) {
+            $resultBase64 = true;
+        } else {
+            $resultBase64 = false;
+        }
 
         return $response->withJson([
             'code' => 0,
             'data' => $this->pack([
-                'result' => $curlData,
+                'resultBase64' => $resultBase64,
+                'result'       => $resultBase64 ? base64_encode($curlData) : $curlData,
             ]),
         ]);
     }
