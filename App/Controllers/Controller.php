@@ -214,13 +214,16 @@ class Controller
             'dns.google.com'    => '74.125.136.138',
         ];
         $host = null;
-        foreach ($hosts as $domain => $ip) {
-            if (strpos($url, $domain) !== false) {
-                $url = str_replace($domain, $ip, $url);
-                $host = $domain;
-                break;
+
+        if (!$this->gProxy) {
+            foreach ($hosts as $domain => $ip) {
+                if (strpos($url, $domain) !== false) {
+                    $url = str_replace($domain, $ip, $url);
+                    $host = $domain;
+                    break;
+                }
+                dd(__FILE__ . ' ' . __LINE__ . ' ' . $domain);
             }
-            dd(__FILE__ . ' ' . __LINE__ . ' ' . $domain);
         }
 
         $serverParams = $this->serverParams;
