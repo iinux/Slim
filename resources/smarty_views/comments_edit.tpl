@@ -10,6 +10,9 @@
     <script>
         function comments_add()
         {
+            var saveBtn = $('#saveBtn');
+            var className = saveBtn.attr('class');
+            saveBtn.attr('class', 'weui-btn weui-btn_plain-disabled');
             var content = $('#content').val();
             localStorage.setItem('commentTemp', content);
             $.ajax({
@@ -31,13 +34,15 @@
                         $toast.fadeOut(100);
                     }, 2000);
                     localStorage.removeItem('commentTemp');
-                    window.location = '/'
+                    window.location = '/';
+                    saveBtn.attr('class', className);
                 },
                 error: function(xhr, type){
                     if (xhr.status == 403) {
                         window.location = '/auth/login';
                     }
-                    alert('Ajax error!')
+                    alert('Ajax error!');
+                    saveBtn.attr('class', className);
                 }
             })
         }
@@ -61,8 +66,8 @@
         </div>
     </div>
     <p style="padding: 10px">
-        <a href="javascript:comments_add();" class="weui-btn weui-btn_primary">保存</a>
-        <a href="javascript:returnButton();" class="weui-btn weui-btn_plain-primary">返回</a>
+        <a href="javascript:comments_add();" class="weui-btn weui-btn_primary" id="saveBtn">保存</a>
+        <a href="javascript:returnButton();" class="weui-btn weui-btn_plain-primary" id="backBtn">返回</a>
     </p>
     <!--BEGIN toast-->
     <div id="toast" style="display: none;">
