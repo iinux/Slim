@@ -102,8 +102,41 @@ if (!function_exists('putenv')) {
     }
 }
 
+if (!function_exists('gencrypt')) {
+    function gencrypt($plaintext, $key)
+    {
+        $key = hash('sha512', $key);
+        $ivLen = openssl_cipher_iv_length($cipher = "AES-128-CBC");
+        $iv = openssl_random_pseudo_bytes($ivLen);
+        $cipherTextRaw = openssl_encrypt($plaintext, $cipher, $key, $options = OPENSSL_RAW_DATA, $iv);
+        $hmac = hash_hmac('sha256', $cipherTextRaw, $key, $as_binary = true);
+        $cipherText = base64_encode($iv . $hmac . $cipherTextRaw);
+        return $cipherText;
+    }
+}
+
+if (!function_exists('gdecrypt')) {
+    function gdecrypt($cipherText, $key)
+    {
+        $key = hash('sha512', $key);
+        $c = base64_decode($cipherText);
+        $ivLen = openssl_cipher_iv_length($cipher = "AES-128-CBC");
+        $iv = substr($c, 0, $ivLen);
+        $hmac = substr($c, $ivLen, $sha2len = 32);
+        $cipherTextRaw = substr($c, $ivLen + $sha2len);
+        $originalPlaintext = openssl_decrypt($cipherTextRaw, $cipher, $key, $options = OPENSSL_RAW_DATA, $iv);
+        $calcHmac = hash_hmac('sha256', $cipherTextRaw, $key, $as_binary = true);
+        if (hash_equals($hmac, $calcHmac))//PHP 5.6+ timing attack safe comparison
+        {
+            return $originalPlaintext;
+        } else {
+            return 'hash error';
+        }
+    }
+}
+
 if (!function_exists('gpack')) {
-    function gpack($data)
+    function gpack($data, $key = 'php')
     {
         $data = json_encode($data);
         if ($data === false) {
@@ -113,21 +146,15 @@ if (!function_exists('gpack')) {
         if ($data === false) {
             return 'gzencode error';
         }
-        $data = base64_encode($data);
-        if ($data === false) {
-            return 'base64_encode error';
-        }
+        $data = gencrypt($data, $key);
         return $data;
     }
 }
 
 if (!function_exists('gunpack')) {
-    function gunpack($data)
+    function gunpack($data, $key = 'php')
     {
-        $data = base64_decode($data);
-        if ($data === false) {
-            dd("base64_decode error ($data)");
-        }
+        $data = gdecrypt($data, $key);
         $data = gzdecode($data);
         if ($data === false) {
             dd("gzdecode error ($data)");

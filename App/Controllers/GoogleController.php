@@ -231,21 +231,6 @@ class GoogleController extends Controller
      * @param array $args
      * @return mixed
      */
-    public function getDns($request, $response, $args)
-    {
-        $output = $this->curl('https://dns.google.com/resolve?' . $request->getServerParam('QUERY_STRING'));
-        $response = $response->withHeader('Content-Type', 'application/json');
-        $response->write($output);
-
-        return $response;
-    }
-
-    /**
-     * @param Request $request
-     * @param Response $response
-     * @param array $args
-     * @return mixed
-     */
     public function dnsResult($request, $response, $args)
     {
         $q = $request->getParam('q');
@@ -265,7 +250,7 @@ class GoogleController extends Controller
     {
         $smarty = $this->getSmarty();
         $smarty->assign('title', 'DNS');
-        $smarty->assign('formAction', '/dns-resolve');
+        $smarty->assign('formAction', '/dns-result');
         $smarty->assign('useGoogleFont', false);
         $smarty->assign('headerTitle', 'DNS');
         $smarty->assign('dns', true);

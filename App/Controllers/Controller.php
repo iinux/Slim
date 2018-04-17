@@ -23,12 +23,18 @@ class Controller
     protected $illuminateRequest;
     protected $request;
     protected $serverParams;
+    protected $gProxy;
+    protected $secretKey;
+    protected $cipher;
 
     public function __construct($container)
     {
         $this->request = slim_app('request');
         $this->logRequest($this->request);
         $this->serverParams = $this->request->getServerParams();
+        $this->gProxy = env('G_PROXY');
+        $this->secretKey = env('SECRET_KEY');
+        $this->cipher = env('CIPHER');
     }
 
     /**
@@ -181,28 +187,44 @@ class Controller
 
     protected function pack(array $data)
     {
-        return gpack($data);
+        return gpack($data, $this->cipher);
     }
 
     protected function unpack($data)
     {
-        return gunpack($data);
+        return gunpack($data, $this->cipher);
     }
 
     protected function curl($url, $data = [])
     {
-        if (env('G_PROXY')) {
+        if ($this->gProxy) {
             $data['postData'] = [
-                'key'  => env('SECRET_KEY'),
+                'key'  => $this->secretKey,
                 'data' => $this->pack([
                     'url'  => $url,
                     'data' => $data,
                 ]),
             ];
-            $url = env('G_PROXY') . '/api/science/alpha';
+            $url = $this->gProxy . '/api/science/alpha';
         }
+
+        $hosts = [
+            'www.google.com'    => '74.125.136.106',
+            'www.google.com.hk' => '74.125.136.94',
+            'dns.google.com'    => '74.125.136.138',
+        ];
+        $host = null;
+        foreach ($hosts as $domain => $ip) {
+            if (strpos($url, $domain) !== false) {
+                $url = str_replace($domain, $ip, $url);
+                $host = $domain;
+                break;
+            }
+            dd(__FILE__ . ' ' . __LINE__ . ' ' . $domain);
+        }
+
         $serverParams = $this->serverParams;
-        $headers = array(
+        $headers = [
             "Connection: {$serverParams['HTTP_CONNECTION']}",
 
             // sometime don't have cache-control
@@ -217,7 +239,10 @@ class Controller
             // "Accept-Language: {$serverParams['HTTP_ACCEPT_LANGUAGE']}",
             // 如果有浏览器的Accept-Language是en-US, 会返回立陶宛语，可能是因为IP的原因
             "Accept-Language: zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7,zh-TW;q=0.6",
-        );
+        ];
+        if ($host) {
+            $headers[] = "Host: $host";
+        }
         $curlSession = curl_init();
         curl_setopt($curlSession, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($curlSession, CURLOPT_URL, $url);
@@ -230,18 +255,16 @@ class Controller
         }
         // $userAgent = "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 1.1.4322; .NET CLR 2.0.50727)";
         // curl_setopt($curlSession, CURLOPT_USERAGENT, $userAgent);
-        curl_setopt($curlSession, CURLOPT_SSL_VERIFYPEER, 0); // 对认证证书来源的检查
-        // curl_setopt($curlSession, CURLOPT_SSL_VERIFYHOST, 1); // 从证书中检查SSL加密算法是否存在
+        curl_setopt($curlSession, CURLOPT_SSL_VERIFYPEER, 0);
+        // curl_setopt($curlSession, CURLOPT_SSL_VERIFYHOST, 0);
         // curl_setopt($curlSession, CURLOPT_REFERER, $ref);
         // curl_setopt($curlSession, CURLOPT_COOKIEFILE,$GLOBALS['cookie_file']); // 读取上面所储存的Cookie信息
         // curl_setopt($curlSession, CURLOPT_COOKIEJAR, $GLOBALS['cookie_file']); // 存放Cookie信息的文件名称
-        // curl_setopt($curlSession, CURLOPT_TIMEOUT, 30); // 设置超时限制防止死循环
+        curl_setopt($curlSession, CURLOPT_TIMEOUT, 10);
 
         if (isset($data['postData'])) {
-            // $data['postData'] = array ("username" => "bob","key" => "12345");
-            // post数据
+            // $data['postData'] = ["username" => "bob","key" => "12345"];
             curl_setopt($curlSession, CURLOPT_POST, 1);
-            // post的变量
             curl_setopt($curlSession, CURLOPT_POSTFIELDS, $data['postData']);
         }
 
@@ -256,12 +279,12 @@ class Controller
         curl_close($curlSession);
 
         // $output = gzdecode($output);
-        if (env('G_PROXY')) {
+        if ($this->gProxy) {
             $data = json_decode($output);
             $output = $this->unpack($data->data);
             if ($output['resultBase64']) {
                 $output = base64_decode($output['result']);
-            } else{
+            } else {
                 $output = $output['result'];
             }
         }

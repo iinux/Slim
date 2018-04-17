@@ -8,3 +8,5 @@ clover.xml
 !.env.example
 storage/session/sess_*
 public_html/xjs
+vendor*.zip
+qxw.zip

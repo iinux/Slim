@@ -40,6 +40,10 @@ $app->group('', function () use ($app) {
     $app->post('/search', '\App\Controllers\GoogleController:searchView');
 
     $app->get('/trump', '\App\Controllers\TwitterController:trump');
+
+    $app->get('/dns', '\App\Controllers\GoogleController:dnsView');
+    $app->get('/dns-result', '\App\Controllers\GoogleController:dnsResult');
+    $app->post('/dns-result', '\App\Controllers\GoogleController:dnsResult');
 })->add('mw.auth');
 
 $app->get('/qxw', '\App\Controllers\QxwController:indexView');
@@ -52,10 +56,6 @@ $app->get('/images/hpp/{fileName}.gif', '\App\Controllers\GoogleController:getLo
 $app->get('/images/branding/googlelogo/2x/{fileName}.png', '\App\Controllers\GoogleController:getLogos');
 $app->get('/images/{fileName}.webp', '\App\Controllers\GoogleController:getLogos');
 $app->get('/images/{fileName}.png', '\App\Controllers\GoogleController:getLogos');
-$app->get('/dns-resolve', '\App\Controllers\GoogleController:getDns');
-$app->post('/dns-resolve', '\App\Controllers\GoogleController:getDns');
-$app->get('/dns', '\App\Controllers\GoogleController:dnsView');
-$app->get('/dns-result', '\App\Controllers\GoogleController:dnsResult');
 $app->get('/xjs/_/js/{s1}/{s2}/{s3}/{s4}/{s5}/{s6}/{s7}', '\App\Controllers\GoogleController:xjs');
 $app->get('/xjs/_/js/{s1}/{s2}/{s3}/{s4}/{s5}/{s6}/{s7}/{s8}', '\App\Controllers\GoogleController:xjs');
 $app->get('/xjs/_/js/{s1}/{s2}/{s3}/{s4}/{s5}/{s6}/{s7}/{s8}/{s9}', '\App\Controllers\GoogleController:xjs');
