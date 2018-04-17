@@ -209,8 +209,8 @@ class Controller
         }
 
         $hosts = [
-            'www.google.com'    => '74.125.136.106',
             'www.google.com.hk' => '74.125.136.94',
+            'www.google.com'    => '74.125.136.106',
             'dns.google.com'    => '74.125.136.138',
         ];
         $host = null;
