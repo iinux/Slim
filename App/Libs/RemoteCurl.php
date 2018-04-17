@@ -17,11 +17,13 @@ class RemoteCurl
 
     protected $secretKey;
     protected $remoteCurlProxy;
+    protected $cipher;
 
     function __construct()
     {
         $this->secretKey = env('SECRET_KEY');
         $this->remoteCurlProxy = env('G_PROXY');
+        $this->cipher = env('CIPHER');
 
         $this->ch = curl_init();
         curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, 1);
@@ -69,12 +71,12 @@ class RemoteCurl
 
     protected function pack(array $data)
     {
-        return gpack($data);
+        return gpack($data, $this->cipher);
     }
 
     protected function unpack($data)
     {
-        return gunpack($data);
+        return gunpack($data, $this->cipher);
     }
 
     function exec()
