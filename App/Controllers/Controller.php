@@ -9,6 +9,7 @@
 namespace App\Controllers;
 
 use App\Libs\Curl;
+use App\Libs\RemoteCurl;
 use Smarty;
 use Slim\Http\Request;
 use Slim\Http\Response;
@@ -222,7 +223,7 @@ class Controller
                     $host = $domain;
                     break;
                 }
-                dd(__FILE__ . ' ' . __LINE__ . ' ' . $domain);
+                dd(__FILE__ . ' ' . __LINE__ . ' ' . $url);
             }
         }
 
@@ -246,40 +247,40 @@ class Controller
         if ($host) {
             $headers[] = "Host: $host";
         }
-        $curlSession = curl_init();
-        curl_setopt($curlSession, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($curlSession, CURLOPT_URL, $url);
-        curl_setopt($curlSession, CURLOPT_RETURNTRANSFER, 1);//设置是将结果保存到字符串中还是输出到屏幕上，1表示将结果保存到字符串
-        curl_setopt($curlSession, CURLOPT_HEADER, 1);//显示返回的Header区域内容
-        // curl_setopt($curlSession, CURLOPT_BINARYTRANSFER, true) ;
-        curl_setopt($curlSession, CURLOPT_ENCODING, 'gzip,deflate');
+        $curlSession = new RemoteCurl();
+        $curlSession->addOpt(CURLOPT_HTTPHEADER, $headers);
+        $curlSession->addOpt(CURLOPT_URL, $url);
+        $curlSession->addOpt(CURLOPT_RETURNTRANSFER, 1);//设置是将结果保存到字符串中还是输出到屏幕上，1表示将结果保存到字符串
+        $curlSession->addOpt(CURLOPT_HEADER, 1);//显示返回的Header区域内容
+        // $curlSession->addOpt(CURLOPT_BINARYTRANSFER, true) ;
+        $curlSession->addOpt(CURLOPT_ENCODING, 'gzip,deflate');
         if (empty(ini_get('open_basedir'))) {
-            curl_setopt($curlSession, CURLOPT_FOLLOWLOCATION, true);//使用自动跳转
+            $curlSession->addOpt(CURLOPT_FOLLOWLOCATION, true);//使用自动跳转
         }
         // $userAgent = "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 1.1.4322; .NET CLR 2.0.50727)";
-        // curl_setopt($curlSession, CURLOPT_USERAGENT, $userAgent);
-        curl_setopt($curlSession, CURLOPT_SSL_VERIFYPEER, 0);
-        // curl_setopt($curlSession, CURLOPT_SSL_VERIFYHOST, 0);
-        // curl_setopt($curlSession, CURLOPT_REFERER, $ref);
-        // curl_setopt($curlSession, CURLOPT_COOKIEFILE,$GLOBALS['cookie_file']); // 读取上面所储存的Cookie信息
-        // curl_setopt($curlSession, CURLOPT_COOKIEJAR, $GLOBALS['cookie_file']); // 存放Cookie信息的文件名称
-        curl_setopt($curlSession, CURLOPT_TIMEOUT, 10);
+        // $curlSession->addOpt(CURLOPT_USERAGENT, $userAgent);
+        $curlSession->addOpt(CURLOPT_SSL_VERIFYPEER, 0);
+        // $curlSession->addOpt(CURLOPT_SSL_VERIFYHOST, 0);
+        // $curlSession->addOpt(CURLOPT_REFERER, $ref);
+        // $curlSession->addOpt(CURLOPT_COOKIEFILE,$GLOBALS['cookie_file']); // 读取上面所储存的Cookie信息
+        // $curlSession->addOpt(CURLOPT_COOKIEJAR, $GLOBALS['cookie_file']); // 存放Cookie信息的文件名称
+        $curlSession->addOpt(CURLOPT_TIMEOUT, 10);
 
         if (isset($data['postData'])) {
             // $data['postData'] = ["username" => "bob","key" => "12345"];
-            curl_setopt($curlSession, CURLOPT_POST, 1);
-            curl_setopt($curlSession, CURLOPT_POSTFIELDS, $data['postData']);
+            $curlSession->addOpt(CURLOPT_POST, 1);
+            $curlSession->addOpt(CURLOPT_POSTFIELDS, $data['postData']);
         }
 
-        $output = curl_exec($curlSession);
-        // $info = curl_getinfo($curlSession);
-        $headerSize = curl_getinfo($curlSession, CURLINFO_HEADER_SIZE);
+        $output = $curlSession->exec();
+        if ($output === false) {
+            return 'Curl error: ' . $curlSession->getError();
+        }
+        // $info = $curlSession->getInfoOptNull();
+        $headerSize = $curlSession->getInfo(CURLINFO_HEADER_SIZE);
         $header = substr($output, 0, $headerSize);
         $output = substr($output, $headerSize);
-        if (curl_errno($curlSession)) {
-            return 'Curl error: ' . curl_error($curlSession);
-        }
-        curl_close($curlSession);
+        $curlSession->close();
 
         // $output = gzdecode($output);
         if ($this->gProxy) {

@@ -71,6 +71,8 @@ class GoogleController extends Controller
     {
         $q = str_replace(' ', '+', $request->getParam('q'));
         $response->write($this->curlGoogle('q=' . $q));
+        // test use baidu
+        // $response->write($this->curlGoogle('wd=' . $q, '/s'));
         return;
     }
 
