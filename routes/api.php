@@ -13,8 +13,11 @@ $app->group('/api/comments', function () use ($app) {
 })->add('mw.auth');
 
 $app->group('/api/common', function () use ($app) {
-    $app->post('/g-proxy', '\App\Controllers\Controller:gProxyServer');
-    $app->post('/remote-curl-proxy', '\App\Controllers\Controller:remoteCurlServer');
+})->add('mw.secret-key-auth');
+
+$app->group('/api/science', function () use ($app) {
+    $app->post('/alpha', '\App\Controllers\Controller:alpha');
+    $app->post('/beta', '\App\Controllers\Controller:beta');
 })->add('mw.secret-key-auth');
 
 $app->post('/api/test-post', '\App\Controllers\IndexController:testPost');

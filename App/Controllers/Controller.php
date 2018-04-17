@@ -8,6 +8,7 @@
 
 namespace App\Controllers;
 
+use App\Libs\Curl;
 use Smarty;
 use Slim\Http\Request;
 use Slim\Http\Response;
@@ -180,36 +181,12 @@ class Controller
 
     protected function pack(array $data)
     {
-        $data = json_encode($data);
-        if ($data === false) {
-            return 'json_encode error(' . json_last_error() . '):' . json_last_error_msg();
-        }
-        $data = gzencode($data, 9);
-        if ($data === false) {
-            return 'gzencode error';
-        }
-        $data = base64_encode($data);
-        if ($data === false) {
-            return 'base64_encode error';
-        }
-        return $data;
+        return gpack($data);
     }
 
     protected function unpack($data)
     {
-        $data = base64_decode($data);
-        if ($data === false) {
-            dd("base64_decode error ($data)");
-        }
-        $data = gzdecode($data);
-        if ($data === false) {
-            dd("gzdecode error ($data)");
-        }
-        $data = json_decode($data, true);
-        if ($data === false) {
-            dd('json_decode error(' . json_last_error() . '):' . json_last_error_msg());
-        }
-        return $data;
+        return gunpack($data);
     }
 
     protected function curl($url, $data = [])
@@ -222,7 +199,7 @@ class Controller
                     'data' => $data,
                 ]),
             ];
-            $url = env('G_PROXY') . '/api/common/g-proxy';
+            $url = env('G_PROXY') . '/api/science/alpha';
         }
         $serverParams = $this->serverParams;
         $headers = array(
@@ -298,7 +275,7 @@ class Controller
      * @param array $args
      * @return mixed
      */
-    public function gProxyServer($request, $response, $args)
+    public function alpha($request, $response, $args)
     {
         $data = $request->getParam('data');
         $data = $this->unpack($data);
@@ -325,7 +302,7 @@ class Controller
      * @param array $args
      * @return mixed
      */
-    public function remoteCurlServer($request, $response, $args)
+    public function beta($request, $response, $args)
     {
         $data = $request->getParam('data');
         $data = $this->unpack($data);
@@ -365,51 +342,3 @@ class Controller
 
 }
 
-class Curl
-{
-    protected $optArray = [];
-    protected $ch;
-
-    function __construct()
-    {
-        $this->ch = curl_init();
-    }
-
-    function addOpt($option, $value)
-    {
-        $this->optArray[$option] = $value;
-    }
-
-    function setOptArray($optArray)
-    {
-        $this->optArray = $optArray;
-    }
-
-    function close()
-    {
-        curl_close($this->ch);
-    }
-
-    function getError()
-    {
-        return curl_error($this->ch);
-    }
-
-    function getInfo($opt = null)
-    {
-        return curl_getinfo($this->ch, $opt);
-    }
-
-    function getInfoOptNull()
-    {
-        return curl_getinfo($this->ch);
-    }
-
-    function exec()
-    {
-        foreach ($this->optArray as $option => $value) {
-            curl_setopt($this->ch, $option, $value);
-        }
-        return curl_exec($this->ch);
-    }
-}
