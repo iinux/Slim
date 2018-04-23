@@ -27,6 +27,15 @@ class IndexController extends Controller
         }*/
         $comments = Comment::orderBy('updated_at', 'desc')->get();
         $smarty = $this->getSmarty();
+        $shuffleText = 'Shuffle';
+        $shuffleUri = '/?shuffle=1';
+        if ($request->getParam('shuffle')) {
+            $comments = $comments->shuffle();
+            $shuffleText = 'Order';
+            $shuffleUri = '/';
+        }
+        $smarty->assign('shuffleText', $shuffleText);
+        $smarty->assign('shuffleUri', $shuffleUri);
         $smarty->assign('comments', $comments);
         $smarty->display('comments.tpl');
     }

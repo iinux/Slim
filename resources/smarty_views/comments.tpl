@@ -42,6 +42,9 @@
 
 <div id="home" class="panel" selected="true">
     <ul>
+        <li><a href="{$shuffleUri}" id="top">{$shuffleText}</a></li>
+    </ul>
+    <ul>
         <li><a href="#bottom" id="top">Goto Bottom</a></li>
     </ul>
     {foreach $comments as $comment}
