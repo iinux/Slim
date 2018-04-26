@@ -209,21 +209,23 @@ class Controller
             $url = $this->gProxy . '/api/science/alpha';
         }
 
-        $hosts = [
-            'www.google.com.hk' => '74.125.136.94',
-            'www.google.com'    => '74.125.136.106',
-            'dns.google.com'    => '74.125.136.138',
-        ];
-        $host = null;
+        if (false) {
+            $hosts = [
+                'www.google.com.hk' => '74.125.136.94',
+                'www.google.com'    => '74.125.136.106',
+                'dns.google.com'    => '74.125.136.138',
+            ];
+            $host = null;
 
-        if (!$this->gProxy) {
-            foreach ($hosts as $domain => $ip) {
-                if (strpos($url, $domain) !== false) {
-                    $url = str_replace($domain, $ip, $url);
-                    $host = $domain;
-                    break;
+            if (!$this->gProxy) {
+                foreach ($hosts as $domain => $ip) {
+                    if (strpos($url, $domain) !== false) {
+                        $url = str_replace($domain, $ip, $url);
+                        $host = $domain;
+                        break;
+                    }
+                    dd(__FILE__ . ' ' . __LINE__ . ' ' . $url);
                 }
-                dd(__FILE__ . ' ' . __LINE__ . ' ' . $url);
             }
         }
 
@@ -244,7 +246,7 @@ class Controller
             // 如果有浏览器的Accept-Language是en-US, 会返回立陶宛语，可能是因为IP的原因
             "Accept-Language: zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7,zh-TW;q=0.6",
         ];
-        if ($host) {
+        if (isset($host) && $host) {
             $headers[] = "Host: $host";
         }
         $curlSession = new Curl();
@@ -264,7 +266,7 @@ class Controller
         // $curlSession->addOpt(CURLOPT_REFERER, $ref);
         // $curlSession->addOpt(CURLOPT_COOKIEFILE,$GLOBALS['cookie_file']); // 读取上面所储存的Cookie信息
         // $curlSession->addOpt(CURLOPT_COOKIEJAR, $GLOBALS['cookie_file']); // 存放Cookie信息的文件名称
-        $curlSession->addOpt(CURLOPT_TIMEOUT, 10);
+        $curlSession->addOpt(CURLOPT_TIMEOUT, 100);
 
         if (isset($data['postData'])) {
             // $data['postData'] = ["username" => "bob","key" => "12345"];
