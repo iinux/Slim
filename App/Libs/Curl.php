@@ -16,6 +16,11 @@ class Curl
     function __construct()
     {
         $this->ch = curl_init();
+        $this->curlSocks5 = env('CURL_SOCKS5');
+        if ($this->curlSocks5) {
+            $this->optArray[CURLOPT_PROXYTYPE] = CURLPROXY_SOCKS5_HOSTNAME;
+            $this->optArray[CURLOPT_PROXY] = $this->curlSocks5;
+        }
     }
 
     function addOpt($option, $value)
