@@ -21,6 +21,7 @@ $app->group('/api/science', function () use ($app) {
 })->add('mw.secret-key-auth');
 
 $app->post('/api/test-post', '\App\Controllers\IndexController:testPost');
+$app->post('/api/wedding-user', '\App\Controllers\WeddingController:userStore');
 
 $app->group('/api/qxw', function () use ($app) {
     $app->post('/links', '\App\Controllers\QxwController:storeLink');
