@@ -28,10 +28,10 @@ if (!function_exists('slim_app')) {
     }
 }
 
-if (!function_exists('addOrdinalNumberSuffix')) {
-    function addOrdinalNumberSuffix($num)
+if (!function_exists('add_ordinal_suffix')) {
+    function add_ordinal_suffix($num)
     {
-        if (!in_array(($num % 100), sarray(11, 12, 13))) {
+        if (!in_array(($num % 100), array(11, 12, 13))) {
             switch ($num % 10) {
                 // Handle 1st, 2nd, 3rd
                 case 1:
@@ -46,8 +46,8 @@ if (!function_exists('addOrdinalNumberSuffix')) {
     }
 }
 
-if (!function_exists('authUser')) {
-    function authUser($refresh = false)
+if (!function_exists('auth_user')) {
+    function auth_user($refresh = false)
     {
         static $authUser = null;
         if (is_null($authUser)) {
@@ -164,5 +164,46 @@ if (!function_exists('gunpack')) {
             dd('json_decode error(' . json_last_error() . '):' . json_last_error_msg());
         }
         return $data;
+    }
+}
+
+if (!function_exists('roman_numerals')) {
+    function roman_numerals($number)
+    {
+        $map1 = ['I', 'X', 'C', 'M'];
+        $map2 = ['X', 'C', 'M'];
+        for ($i = 1; $i <= 6; $i++) {
+            foreach ($map2 as $item) {
+                $map1[] = "$item($i)";
+            }
+        }
+        $map3 = ['V', 'L', 'D'];
+        $map4 = ['V', 'L', 'D'];
+        for ($i = 1; $i <= 6; $i++) {
+            foreach ($map4 as $item) {
+                $map3[] = "$item($i)";
+            }
+        }
+        $map5 = [];
+        $base = 1;
+        for ($i = 0; $i < 19; $i++) {
+            $map5[$map1[$i]] = $base;
+            $map5[$map1[$i] . $map3[$i]] = $base * 4;
+            $map5[$map3[$i]] = $base * 5;
+            $map5[$map1[$i] . $map1[$i + 1]] = $base * 9;
+            $base *= 10;
+        }
+        $map5 = array_reverse($map5);
+        $returnValue = '';
+        while ($number > 0) {
+            foreach ($map5 as $roman => $int) {
+                if ($number >= $int) {
+                    $number -= $int;
+                    $returnValue .= $roman;
+                    break;
+                }
+            }
+        }
+        return $returnValue;
     }
 }
