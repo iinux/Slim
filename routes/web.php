@@ -63,3 +63,5 @@ $app->post('/gen_204', '\App\Controllers\GoogleController:null');
 $app->get('/gen_204', '\App\Controllers\GoogleController:null');
 $app->get('/client_204', '\App\Controllers\GoogleController:null');
 $app->get('/async/irc', '\App\Controllers\GoogleController:null');
+
+$app->get('/vue', '\App\Controllers\VueController:indexView');
