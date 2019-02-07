@@ -71,9 +71,14 @@ class FmmController extends Controller
             }
         }
 
-        $output = json_decode($output);
+        $outputObj = json_decode($output);
+
+        if (!isset($outputObj->data->lists)) {
+            return $output;
+        }
+
         $smarty = $this->getSmarty();
-        $smarty->assign('lists', $output->data->lists);
+        $smarty->assign('lists', $outputObj->data->lists);
         $smarty->display('fmm.tpl');
     }
 
@@ -126,7 +131,7 @@ class FmmController extends Controller
                 $header = substr($output, 0, $headerSize);
                 $output = substr($output, $headerSize);
                 $curlSession->close();
-                
+
                 if (json_decode($output)) {
                     $redis->set($redisKey, $output);
                     $redis->expire($redisKey, $config['key_expire_second']);
@@ -134,9 +139,14 @@ class FmmController extends Controller
             }
         }
 
-        $output = json_decode($output);
+        $outputObj = json_decode($output);
+
+        if (!isset($outputObj->data->lists)) {
+            return $output;
+        }
+
         $smarty = $this->getSmarty();
-        $smarty->assign('lists', $output->data->lists);
+        $smarty->assign('lists', $outputObj->data->lists);
         $smarty->display('fmm_anchors.tpl');
     }
 
