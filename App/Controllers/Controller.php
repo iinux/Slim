@@ -256,9 +256,6 @@ class Controller
         $curlSession->addOpt(CURLOPT_HEADER, 1);//显示返回的Header区域内容
         // $curlSession->addOpt(CURLOPT_BINARYTRANSFER, true) ;
         $curlSession->addOpt(CURLOPT_ENCODING, 'gzip,deflate');
-        if (empty(ini_get('open_basedir'))) {
-            $curlSession->addOpt(CURLOPT_FOLLOWLOCATION, true);//使用自动跳转
-        }
         // $userAgent = "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 1.1.4322; .NET CLR 2.0.50727)";
         // $curlSession->addOpt(CURLOPT_USERAGENT, $userAgent);
         $curlSession->addOpt(CURLOPT_SSL_VERIFYPEER, 0);

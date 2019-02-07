@@ -13,11 +13,15 @@ class Curl
     protected $optArray = [];
     protected $ch;
 
-    function __construct()
+    function __construct($curlSocks5 = true)
     {
         $this->ch = curl_init();
+        if (empty(ini_get('open_basedir'))) {
+            $this->addOpt(CURLOPT_FOLLOWLOCATION, true);
+        }
+
         $this->curlSocks5 = env('CURL_SOCKS5');
-        if ($this->curlSocks5) {
+        if ($curlSocks5 && $this->curlSocks5) {
             $this->optArray[CURLOPT_PROXYTYPE] = CURLPROXY_SOCKS5_HOSTNAME;
             $this->optArray[CURLOPT_PROXY] = $this->curlSocks5;
         }
