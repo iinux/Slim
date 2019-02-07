@@ -53,6 +53,7 @@ class FmmController extends Controller
             // $curlSession->addOpt(CURLOPT_SSL_VERIFYHOST, 0);
             $curlSession->addOpt(CURLOPT_TIMEOUT, 100);
             $curlSession->addOpt(CURLOPT_POST, 1);
+            $curlSession->addOpt(CURLOPT_POSTFIELDS, "");
 
             $output = $curlSession->exec();
             if ($output === false) {
