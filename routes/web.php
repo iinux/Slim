@@ -46,6 +46,7 @@ $app->group('', function () use ($app) {
     $app->post('/dns-result', '\App\Controllers\GoogleController:dnsResult');
 
     $app->get('/fmm', '\App\Controllers\FmmController:indexView');
+    $app->get('/fmm/anchors/{name}', '\App\Controllers\FmmController:anchorsView');
 })->add('mw.auth');
 
 $app->get('/qxw', '\App\Controllers\QxwController:indexView');
