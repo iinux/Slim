@@ -24,7 +24,8 @@ class FmmController extends Controller
     public function indexView($request, $response, $args)
     {
         $config = config('fmm');
-        $host = preg_match("/https?:\/\/([\w\d\.]+)\/.*/", $config['index_uri'], $matches);
+        preg_match("/https?:\/\/([\w\d\.]+)\/.*/", $config['index_uri'], $matches);
+        $host = $matches[1];
 
         $redisKey = 'fmm:index';
         $redis = new Client();
@@ -44,8 +45,8 @@ class FmmController extends Controller
             $curlSession = new Curl(false);
             $curlSession->addOpt(CURLOPT_HTTPHEADER, $headers);
             $curlSession->addOpt(CURLOPT_URL, $url);
-            $curlSession->addOpt(CURLOPT_RETURNTRANSFER, 1);//设置是将结果保存到字符串中还是输出到屏幕上，1表示将结果保存到字符串
-            $curlSession->addOpt(CURLOPT_HEADER, 1);//显示返回的Header区域内容
+            $curlSession->addOpt(CURLOPT_RETURNTRANSFER, 1);
+            $curlSession->addOpt(CURLOPT_HEADER, 1);
             $curlSession->addOpt(CURLOPT_BINARYTRANSFER, true);
             //$curlSession->addOpt(CURLOPT_ENCODING, 'gzip,deflate');
             $curlSession->addOpt(CURLOPT_SSL_VERIFYPEER, 0);
@@ -56,14 +57,18 @@ class FmmController extends Controller
             $output = $curlSession->exec();
             if ($output === false) {
                 return 'Curl error: ' . $curlSession->getError();
+            } else {
+                // $info = $curlSession->getInfoOptNull();
+                $headerSize = $curlSession->getInfo(CURLINFO_HEADER_SIZE);
+                $header = substr($output, 0, $headerSize);
+                $output = substr($output, $headerSize);
+                $curlSession->close();
+
+                if (json_decode($output)) {
+                    $redis->set($redisKey, $output);
+                    $redis->expire($redisKey, $config['key_expire_second']);
+                }
             }
-            // $info = $curlSession->getInfoOptNull();
-            $headerSize = $curlSession->getInfo(CURLINFO_HEADER_SIZE);
-            $header = substr($output, 0, $headerSize);
-            $output = substr($output, $headerSize);
-            $curlSession->close();
-            $redis->set($redisKey, $output);
-            $redis->expire($redisKey, $config['key_expire_second']);
         }
 
         $output = json_decode($output);
@@ -81,7 +86,8 @@ class FmmController extends Controller
     public function anchorsView($request, $response, $args)
     {
         $config = config('fmm');
-        $host = preg_match("/https?:\/\/([\w\d\.]+)\/.*/", $config['index_uri'], $matches);
+        preg_match("/https?:\/\/([\w\d\.]+)\/.*/", $config['index_uri'], $matches);
+        $host = $matches[1];
 
         $redisKey = "fmm:index:{$args['name']}";
         $redis = new Client();
@@ -101,8 +107,8 @@ class FmmController extends Controller
             $curlSession = new Curl(false);
             $curlSession->addOpt(CURLOPT_HTTPHEADER, $headers);
             $curlSession->addOpt(CURLOPT_URL, $url);
-            $curlSession->addOpt(CURLOPT_RETURNTRANSFER, 1);//设置是将结果保存到字符串中还是输出到屏幕上，1表示将结果保存到字符串
-            $curlSession->addOpt(CURLOPT_HEADER, 1);//显示返回的Header区域内容
+            $curlSession->addOpt(CURLOPT_RETURNTRANSFER, 1);
+            $curlSession->addOpt(CURLOPT_HEADER, 1);
             $curlSession->addOpt(CURLOPT_BINARYTRANSFER, true);
             //$curlSession->addOpt(CURLOPT_ENCODING, 'gzip,deflate');
             $curlSession->addOpt(CURLOPT_SSL_VERIFYPEER, 0);
@@ -114,14 +120,18 @@ class FmmController extends Controller
             $output = $curlSession->exec();
             if ($output === false) {
                 return 'Curl error: ' . $curlSession->getError();
+            } else {
+                // $info = $curlSession->getInfoOptNull();
+                $headerSize = $curlSession->getInfo(CURLINFO_HEADER_SIZE);
+                $header = substr($output, 0, $headerSize);
+                $output = substr($output, $headerSize);
+                $curlSession->close();
+                
+                if (json_decode($output)) {
+                    $redis->set($redisKey, $output);
+                    $redis->expire($redisKey, $config['key_expire_second']);
+                }
             }
-            // $info = $curlSession->getInfoOptNull();
-            $headerSize = $curlSession->getInfo(CURLINFO_HEADER_SIZE);
-            $header = substr($output, 0, $headerSize);
-            $output = substr($output, $headerSize);
-            $curlSession->close();
-            $redis->set($redisKey, $output);
-            $redis->expire($redisKey, $config['key_expire_second']);
         }
 
         $output = json_decode($output);
