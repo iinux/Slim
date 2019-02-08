@@ -1,0 +1,13 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: qzhang
+ * Date: 2019/2/7
+ * Time: 9:40
+ */
+
+return [
+    'config_json_uri'   => '',
+    'init_vmess'        => '',
+    'key_expire_second' => 600,
+];
