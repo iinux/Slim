@@ -7,8 +7,9 @@
  */
 
 return [
-    'token'             => '',
+    'auth'              => '',
     'index_uri'         => '',
     'anchors_uri'       => '',
+    'login_uri'         => '',
     'key_expire_second' => 600,
 ];

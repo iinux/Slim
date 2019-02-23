@@ -15,6 +15,17 @@ use Slim\Http\Response;
 
 class FmmController extends Controller
 {
+    protected $redis;
+
+    const REDIS_KEY_INDEX = 'fmm:index';
+    const REDIS_KEY_TOKEN = 'fmm:key';
+
+    public function __construct($container)
+    {
+        parent::__construct($container);
+        $this->redis = new Client();
+    }
+
     /**
      * @param Request $request
      * @param Response $response
@@ -23,57 +34,11 @@ class FmmController extends Controller
      */
     public function indexView($request, $response, $args)
     {
-        $config = config('fmm');
-        preg_match("/https?:\/\/([\w\d\.]+)\/.*/", $config['index_uri'], $matches);
-        $host = $matches[1];
 
-        $redisKey = 'fmm:index';
-        $redis = new Client();
-        $output = $redis->get($redisKey);
-
-        if (empty($output)) {
-            $url = $config['index_uri'];
-            $headers = [
-                'Content: application/json',
-                "token: {$config['token']}",
-                'Content-Type: application/json; charset=utf-8',
-                "Host: $host",
-                'User-Agent: okhttp/3.8.1',
-                'Pragma: no-cache',
-                'Cache-Control: no-cache',
-            ];
-            $curlSession = new Curl(false);
-            $curlSession->addOpt(CURLOPT_HTTPHEADER, $headers);
-            $curlSession->addOpt(CURLOPT_URL, $url);
-            $curlSession->addOpt(CURLOPT_RETURNTRANSFER, 1);
-            $curlSession->addOpt(CURLOPT_HEADER, 1);
-            $curlSession->addOpt(CURLOPT_BINARYTRANSFER, true);
-            //$curlSession->addOpt(CURLOPT_ENCODING, 'gzip,deflate');
-            $curlSession->addOpt(CURLOPT_SSL_VERIFYPEER, 0);
-            // $curlSession->addOpt(CURLOPT_SSL_VERIFYHOST, 0);
-            $curlSession->addOpt(CURLOPT_TIMEOUT, 100);
-            $curlSession->addOpt(CURLOPT_POST, 1);
-            $curlSession->addOpt(CURLOPT_POSTFIELDS, "");
-
-            $output = $curlSession->exec();
-            if ($output === false) {
-                return 'Curl error: ' . $curlSession->getError();
-            } else {
-                // $info = $curlSession->getInfoOptNull();
-                $headerSize = $curlSession->getInfo(CURLINFO_HEADER_SIZE);
-                $header = substr($output, 0, $headerSize);
-                $output = substr($output, $headerSize);
-                $curlSession->close();
-
-                if (json_decode($output)) {
-                    $redis->set($redisKey, $output);
-                    $redis->expire($redisKey, $config['key_expire_second']);
-                }
-            }
-        }
+        $redisKey = self::REDIS_KEY_INDEX;
+        $output = $this->getData($redisKey);
 
         $outputObj = json_decode($output);
-
         if (!isset($outputObj->data->lists)) {
             return $output;
         }
@@ -91,57 +56,10 @@ class FmmController extends Controller
      */
     public function anchorsView($request, $response, $args)
     {
-        $config = config('fmm');
-        preg_match("/https?:\/\/([\w\d\.]+)\/.*/", $config['index_uri'], $matches);
-        $host = $matches[1];
-
         $redisKey = "fmm:index:{$args['name']}";
-        $redis = new Client();
-        $output = $redis->get($redisKey);
-
-        if (empty($output)) {
-            $url = $config['anchors_uri'];
-            $headers = [
-                'Content: application/json',
-                "token: {$config['token']}",
-                'Content-Type: application/json; charset=utf-8',
-                "Host: $host",
-                'User-Agent: okhttp/3.8.1',
-                'Pragma: no-cache',
-                'Cache-Control: no-cache',
-            ];
-            $curlSession = new Curl(false);
-            $curlSession->addOpt(CURLOPT_HTTPHEADER, $headers);
-            $curlSession->addOpt(CURLOPT_URL, $url);
-            $curlSession->addOpt(CURLOPT_RETURNTRANSFER, 1);
-            $curlSession->addOpt(CURLOPT_HEADER, 1);
-            $curlSession->addOpt(CURLOPT_BINARYTRANSFER, true);
-            //$curlSession->addOpt(CURLOPT_ENCODING, 'gzip,deflate');
-            $curlSession->addOpt(CURLOPT_SSL_VERIFYPEER, 0);
-            // $curlSession->addOpt(CURLOPT_SSL_VERIFYHOST, 0);
-            $curlSession->addOpt(CURLOPT_TIMEOUT, 100);
-            $curlSession->addOpt(CURLOPT_POST, 1);
-            $curlSession->addOpt(CURLOPT_POSTFIELDS, "{\"name\":\"{$args['name']}\"}");
-
-            $output = $curlSession->exec();
-            if ($output === false) {
-                return 'Curl error: ' . $curlSession->getError();
-            } else {
-                // $info = $curlSession->getInfoOptNull();
-                $headerSize = $curlSession->getInfo(CURLINFO_HEADER_SIZE);
-                $header = substr($output, 0, $headerSize);
-                $output = substr($output, $headerSize);
-                $curlSession->close();
-
-                if (json_decode($output)) {
-                    $redis->set($redisKey, $output);
-                    $redis->expire($redisKey, $config['key_expire_second']);
-                }
-            }
-        }
+        $output = $this->getData($redisKey, "{\"name\":\"{$args['name']}\"}");
 
         $outputObj = json_decode($output);
-
         if (!isset($outputObj->data->lists)) {
             return $output;
         }
@@ -151,5 +69,95 @@ class FmmController extends Controller
         $smarty->display('fmm_anchors.tpl');
     }
 
+    protected function getToken()
+    {
+        $token = $this->redis->get(self::REDIS_KEY_TOKEN);
+        if (empty($token)) {
+            $config = config('fmm');
+            $output = $this->request($config['login_uri'], $config['auth']);
+            $outputObj = json_decode($output);
+            if (isset($outputObj->data->token)) {
+                $token = $outputObj->data->token;
+                $this->redis->set(self::REDIS_KEY_TOKEN, $token);
+            } else {
+                $token = '';
+            }
+        }
+        return $token;
+    }
 
+    protected function request($url, $postFields = '')
+    {
+        preg_match("/https?:\/\/([\w\d\.]+)\/.*/", $url, $matches);
+        $host = $matches[1];
+
+        $config = config('fmm');
+        if ($url == $config['login_uri']) {
+            $token = 'access_token';
+        } else {
+            $token = $this->getToken();
+        }
+
+        $headers = [
+            'Content: application/json',
+            "token: {$token}",
+            'Content-Type: application/json; charset=utf-8',
+            "Host: $host",
+            'User-Agent: okhttp/3.8.1',
+            'Pragma: no-cache',
+            'Cache-Control: no-cache',
+        ];
+        $curlSession = new Curl(false);
+        $curlSession->addOpt(CURLOPT_HTTPHEADER, $headers);
+        $curlSession->addOpt(CURLOPT_URL, $url);
+        $curlSession->addOpt(CURLOPT_RETURNTRANSFER, 1);
+        $curlSession->addOpt(CURLOPT_HEADER, 1);
+        $curlSession->addOpt(CURLOPT_BINARYTRANSFER, true);
+        //$curlSession->addOpt(CURLOPT_ENCODING, 'gzip,deflate');
+        $curlSession->addOpt(CURLOPT_SSL_VERIFYPEER, 0);
+        // $curlSession->addOpt(CURLOPT_SSL_VERIFYHOST, 0);
+        $curlSession->addOpt(CURLOPT_TIMEOUT, 100);
+        $curlSession->addOpt(CURLOPT_POST, 1);
+        $curlSession->addOpt(CURLOPT_POSTFIELDS, $postFields);
+
+        $output = $curlSession->exec();
+        if ($output === false) {
+            return 'Curl error: ' . $curlSession->getError();
+        } else {
+            // $info = $curlSession->getInfoOptNull();
+            $headerSize = $curlSession->getInfo(CURLINFO_HEADER_SIZE);
+            $header = substr($output, 0, $headerSize);
+            $output = substr($output, $headerSize);
+            $curlSession->close();
+
+            return $output;
+        }
+
+    }
+
+    protected function getData($redisKey, $postFields = "")
+    {
+        $output = $this->redis->get($redisKey);
+
+        if (empty($output)) {
+            $config = config('fmm');
+            if ($redisKey == self::REDIS_KEY_INDEX) {
+                $uri = $config['index_uri'];
+            } else {
+                $uri = $config['anchors_uri'];
+            }
+            $output = $this->request($uri, $postFields);
+
+            if ($outputObj = json_decode($output)) {
+                if (isset($outputObj->code) && $outputObj->code == -997) {
+                    $this->redis->del(self::REDIS_KEY_TOKEN);
+                } else {
+                    $this->redis->set($redisKey, $output);
+                    $this->redis->expire($redisKey, $config['key_expire_second']);
+                }
+            }
+        }
+
+        return $output;
+    }
 }
