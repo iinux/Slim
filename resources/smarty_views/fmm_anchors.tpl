@@ -15,6 +15,7 @@
                 <img src="{$item->img}" />
                 {$item->title}
             </a>
+            <p>{$item->play_url}</p>
         </li>
     </ul>
 {/foreach}
