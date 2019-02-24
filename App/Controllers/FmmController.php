@@ -160,4 +160,21 @@ class FmmController extends Controller
 
         return $output;
     }
+
+    /**
+     * @param Request $request
+     * @param Response $response
+     * @param $args
+     * @return mixed
+     */
+    public function playerView($request, $response, $args)
+    {
+        $smarty = $this->getSmarty();
+        $smarty->assign('url', $args['url']);
+        if (ends_with($args['url'], '.flv')) {
+            $smarty->display('fmm_flv_player.tpl');
+        } else {
+            $smarty->display('fmm_player.tpl');
+        }
+    }
 }

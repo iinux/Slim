@@ -47,6 +47,7 @@ $app->group('', function () use ($app) {
 
     $app->get('/fmm', '\App\Controllers\FmmController:indexView');
     $app->get('/fmm/anchors/{name}', '\App\Controllers\FmmController:anchorsView');
+    $app->get('/fmm/player/{url:.*}', '\App\Controllers\FmmController:playerView');
 
     $app->get('/fs', '\App\Controllers\FsController:indexView');
 })->add('mw.auth');
