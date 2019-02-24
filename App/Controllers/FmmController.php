@@ -73,6 +73,9 @@ class FmmController extends Controller
     {
         $token = $this->redis->get(self::REDIS_KEY_TOKEN);
         if (empty($token)) {
+            if (env('APP_ENV') == 'local') {
+                dd('copy token please');
+            }
             $config = config('fmm');
             $output = $this->request($config['login_uri'], $config['auth']);
             $outputObj = json_decode($output);
