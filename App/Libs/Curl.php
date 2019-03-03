@@ -13,7 +13,7 @@ class Curl
     protected $optArray = [];
     protected $ch;
 
-    function __construct($curlSocks5 = true)
+    function __construct($curlSocks5 = false)
     {
         $this->ch = curl_init();
         if (empty(ini_get('open_basedir'))) {

@@ -249,7 +249,7 @@ class Controller
         if (isset($host) && $host) {
             $headers[] = "Host: $host";
         }
-        $curlSession = new Curl();
+        $curlSession = new Curl(true);
         $curlSession->addOpt(CURLOPT_HTTPHEADER, $headers);
         $curlSession->addOpt(CURLOPT_URL, $url);
         $curlSession->addOpt(CURLOPT_RETURNTRANSFER, 1);//设置是将结果保存到字符串中还是输出到屏幕上，1表示将结果保存到字符串
@@ -333,7 +333,7 @@ class Controller
         $data = $request->getParam('data');
         $data = $this->unpack($data);
 
-        $ch = new Curl();
+        $ch = new Curl(true);
         $ch->setOptArray($data['optArray']);
 
         $curlResponse = $ch->exec();
