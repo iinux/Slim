@@ -8,6 +8,7 @@
 </style>
 </head>
 <body>
+{$i=0}
 {foreach $lists as $item}
     <ul>
         <li>
@@ -15,13 +16,14 @@
                 <img src="{$item->img}" />
                 {$item->title}
             </a>
-            <p id="foo">{$item->play_url}</p>
+            <p id="foo{$i}">{$item->play_url}</p>
             <!-- Trigger -->
-            <button class="btn" data-clipboard-target="#foo">
+            <button class="btn" data-clipboard-target="#foo{$i}">
                 点击复制
             </button>
         </li>
     </ul>
+    {$i++}
 {/foreach}
 <script src="/js/clipboard.min.js"></script>
 <script>
