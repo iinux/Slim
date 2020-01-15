@@ -14,6 +14,7 @@
             <td>{$chPrice->to}</td>
             <td>{$chPrice->date}</td>
             <td>{$chPrice->price}</td>
+            <td>{$chPrice->created_at}</td>
             <td>{$chPrice->updated_at}</td>
         </tr>
     {/foreach}

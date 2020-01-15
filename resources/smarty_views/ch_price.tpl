@@ -15,6 +15,7 @@
             <td>
                 <a href="/chPriceOne?from={$chPrice->from}&to={$chPrice->to}&date={$chPrice->date}">{$chPrice->price}</a>
             </td>
+            <td>{$chPrice->created_at}</td>
             <td>{$chPrice->updated_at}</td>
         </tr>
     {/foreach}
