@@ -44,6 +44,16 @@ class ChPriceController extends Controller
         $smarty = $this->getSmarty();
         $smarty->assign('chPrices', $chPrices);
 
+        $chartData = [];
+        foreach ($chPrices as $chPrice) {
+            $chartData[] = [
+                'time'  => $chPrice->created_at->format("Y-m-d H:i"),
+                'price' => $chPrice->price,
+                'line'  => "{$chPrice->from}{$chPrice->to}",
+            ];
+        }
+        $smarty->assign('chartData', json_encode($chartData));
+
         $smarty->display('ch_price_one.tpl');
     }
 }

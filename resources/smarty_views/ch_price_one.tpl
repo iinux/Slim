@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>ch price</title>
+    <script src="https://as.alipayobjects.com/g/datavis/g2/1.2.1/index.js"></script>
 </head>
 <body>
 <table border="1" cellspacing="0">
@@ -16,5 +17,19 @@
         </tr>
     {/foreach}
 </table>
+<div id="c1"></div>
+<script>
+    var chart = new G2.Chart({
+        id: 'c1',
+        width: 1000,
+        height: 500
+    });
+
+    var data = JSON.parse('{$chartData}');
+    chart.source(data);
+    chart.line().position('time*price').color('line');
+    // chart.interval().position('time*price').color('time');
+    chart.render();
+</script>
 </body>
 </html>

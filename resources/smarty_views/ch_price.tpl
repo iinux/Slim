@@ -11,7 +11,9 @@
             <td>{$chPrice->from}</td>
             <td>{$chPrice->to}</td>
             <td>{$chPrice->date}</td>
-            <td><a href="/chPriceOne?from={$chPrice->from}&to={$chPrice->to}&date={$chPrice->date}">{$chPrice->price}</a></td>
+            <td>
+                <a href="/chPriceOne?from={$chPrice->from}&to={$chPrice->to}&date={$chPrice->date}">{$chPrice->price}</a>
+            </td>
             <td>{$chPrice->updated_at}</td>
         </tr>
     {/foreach}
