@@ -54,6 +54,9 @@ $app->group('', function () use ($app) {
 
 $app->get('/qxw', '\App\Controllers\QxwController:indexView');
 $app->get('/eat', '\App\Controllers\EatController:which');
+$app->get('/chPrice', '\App\Controllers\ChPriceController:indexView');
+$app->get('/chPriceOne', '\App\Controllers\ChPriceController:oneView');
+
 $app->get('/logos/doodles/2017/{fileName}.png', '\App\Controllers\GoogleController:getLogos');
 $app->get('/logos/doodles/2018/{fileName}.png', '\App\Controllers\GoogleController:getLogos');
 $app->get('/images/branding/googlelogo/1x/{fileName}.png', '\App\Controllers\GoogleController:getLogos');
