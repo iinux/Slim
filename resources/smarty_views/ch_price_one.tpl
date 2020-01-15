@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>ch price</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="https://as.alipayobjects.com/g/datavis/g2/1.2.1/index.js"></script>
 </head>
 <body>

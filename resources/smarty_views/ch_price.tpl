@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>ch price</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
 <table border="1" cellspacing="0">
