@@ -69,7 +69,11 @@ class GoogleController extends Controller
      */
     public function searchView($request, $response, $args)
     {
-        $q = str_replace(' ', '+', $request->getParam('q'));
+        $q = $request->getParam('q');
+        if (!empty($q)) {
+            return $response->withRedirect("https://www.baidu.com/s?wd=$q");
+        }
+        $q = str_replace(' ', '+', $q);
         $response->write($this->curlGoogle('q=' . $q));
         // test use baidu
         // $response->write($this->curlGoogle('wd=' . $q, '/s'));

@@ -231,7 +231,7 @@ class Controller
 
         $serverParams = $this->serverParams;
         $headers = [
-            "Connection: {$serverParams['HTTP_CONNECTION']}",
+            // "Connection: {$serverParams['HTTP_CONNECTION']}",
 
             // sometime don't have cache-control
             // "Cache-Control: {$serverParams['HTTP_CACHE_CONTROL']}",
@@ -283,6 +283,7 @@ class Controller
 
         // $output = gzdecode($output);
         if ($this->gProxy) {
+            dd($output);
             $data = json_decode($output);
             $output = $this->unpack($data->data);
             if ($output['resultBase64']) {
