@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: nalux
- * Date: 2017/5/28
- * Time: 17:22
- */
 
 require_once __DIR__.'/../support/helpers.php';
 require __DIR__.'/../vendor/autoload.php';

@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: nalux
- * Date: 2017/5/25
- * Time: 23:26
- */
 
 namespace App\Models;
 
@@ -25,7 +19,7 @@ class User extends Model
         return $jsonObject;
 
     }
-    
+
     public function hasRight($right = null)
     {
         if (isset($this->json_data->isRoot) && $this->json_data->isRoot) {

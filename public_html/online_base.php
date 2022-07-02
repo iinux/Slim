@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: nalux
- * Date: 2017/11/5
- * Time: 18:33
- */
 
 $PASSWORD = '9f29b97a0ee6f8e6ba4783fc9bc08ce2c8c82bae';
 

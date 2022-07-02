@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: nalux
- * Date: 2017/5/28
- * Time: 20:26
- */
 
 namespace App\Http\Middleware;
 
@@ -15,7 +9,7 @@ use Slim\Http\Response;
 class RootAuthenticate extends Authenticate
 {
     const ROOT_IDENT = ['admin', 'github-iinux'];
-    
+
     public static function isLogin()
     {
         if (empty($_SESSION['user'])) {
