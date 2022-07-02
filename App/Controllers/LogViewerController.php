@@ -1,6 +1,7 @@
 <?php
 namespace App\Controllers;
 
+use Exception;
 use Slim\Http\Request;
 use Slim\Http\Response;
 use Rap2hpoutre\LaravelLogViewer\LaravelLogViewer;
@@ -20,6 +21,7 @@ class LogViewerController extends Controller
      * @param Response $response
      * @param array $args
      * @return mixed
+     * @throws Exception
      */
     public function index($request, $response, $args)
     {

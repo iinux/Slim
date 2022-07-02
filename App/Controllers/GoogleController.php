@@ -1,15 +1,11 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: nalux
- * Date: 2017/5/26
- * Time: 21:23
- */
 
 namespace App\Controllers;
 
+use Slim\Http\Message;
 use Slim\Http\Request;
 use Slim\Http\Response;
+use SmartyException;
 
 class GoogleController extends Controller
 {
@@ -25,7 +21,8 @@ class GoogleController extends Controller
      * @param Request $request
      * @param Response $response
      * @param array $args
-     * @return mixed
+     * @return void
+     * @throws SmartyException
      */
     public function indexView($request, $response, $args)
     {
@@ -52,7 +49,7 @@ class GoogleController extends Controller
      * @param Request $request
      * @param Response $response
      * @param array $args
-     * @return mixed
+     * @return Response|Message
      */
     public function completeSearch($request, $response, $args)
     {
@@ -65,7 +62,7 @@ class GoogleController extends Controller
      * @param Request $request
      * @param Response $response
      * @param array $args
-     * @return mixed
+     * @return Response|void
      */
     public function searchView($request, $response, $args)
     {
@@ -77,14 +74,13 @@ class GoogleController extends Controller
         $response->write($this->curlGoogle('q=' . $q));
         // test use baidu
         // $response->write($this->curlGoogle('wd=' . $q, '/s'));
-        return;
     }
 
     /**
      * @param Request $request
      * @param Response $response
      * @param array $args
-     * @return mixed
+     * @return void
      */
     public function null($request, $response, $args)
     {
@@ -150,22 +146,12 @@ class GoogleController extends Controller
      * @param Request $request
      * @param Response $response
      * @param array $args
-     * @return mixed
+     * @return Response
      */
     public function getLogos($request, $response, $args)
     {
         $file = __INDEX_PHP_DIR__ . $request->getUri()->getPath();
-        $url = $this->gDomain . $request->getUri()->getPath();
-
-        $output = $this->curl($url);
-
-        $filePath = substr($file, 0, strrpos($file, "/"));
-
-        if ($filePath && !is_dir($filePath)) {
-            mkdir($filePath, 0777, true);
-        }
-
-        file_put_contents($file, $output);
+        $output = $this->getOutput($request, $file);
         $response->withHeader('Content-Type', 'image/png');
         $response->write($output);
 
@@ -176,7 +162,7 @@ class GoogleController extends Controller
      * @param Request $request
      * @param Response $response
      * @param array $args
-     * @return mixed
+     * @return Message|Response
      */
     public function getStaticImage($request, $response, $args)
     {
@@ -205,7 +191,7 @@ class GoogleController extends Controller
      * @param Request $request
      * @param Response $response
      * @param array $args
-     * @return mixed
+     * @return Message|Response
      */
     public function xjs($request, $response, $args)
     {
@@ -215,15 +201,7 @@ class GoogleController extends Controller
         if (file_exists($file)) {
             $output = file_get_contents($file);
         } else {
-            $url = $this->gDomain . $request->getUri()->getPath();
-            $output = $this->curl($url);
-
-            $filePath = substr($file, 0, strrpos($file, "/"));
-            if ($filePath && !is_dir($filePath)) {
-                mkdir($filePath, 0777, true);
-            }
-
-            file_put_contents($file, $output);
+            $output = $this->getOutput($request, $file);
         }
         $response = $response->withHeader('Content-Type', 'text/javascript');
         $response->write($output);
@@ -235,7 +213,7 @@ class GoogleController extends Controller
      * @param Request $request
      * @param Response $response
      * @param array $args
-     * @return mixed
+     * @return Message|Response
      */
     public function dnsResult($request, $response, $args)
     {
@@ -250,7 +228,8 @@ class GoogleController extends Controller
      * @param Request $request
      * @param Response $response
      * @param array $args
-     * @return mixed
+     * @return void
+     * @throws SmartyException
      */
     public function dnsView($request, $response, $args)
     {
@@ -265,8 +244,6 @@ class GoogleController extends Controller
         } else {
             $smarty->display('google_index.tpl');
         }
-
-        return;
     }
 
     public function hideImg()
@@ -275,5 +252,26 @@ class GoogleController extends Controller
             'var img=document.getElementsByTagName("img")[document.getElementsByTagName("img").length-1];' .
             'if(img.src.indexOf("https://cdn.rawgit.com/000webhost/logo/")>=0){img.style.display="none";}' .
             '}</script>';
+    }
+
+    /**
+     * @param Request $request
+     * @param $file
+     * @return false|mixed|string
+     */
+    public function getOutput(Request $request, $file)
+    {
+        $url = $this->gDomain . $request->getUri()->getPath();
+
+        $output = $this->curl($url);
+
+        $filePath = substr($file, 0, strrpos($file, "/"));
+
+        if ($filePath && !is_dir($filePath)) {
+            mkdir($filePath, 0777, true);
+        }
+
+        file_put_contents($file, $output);
+        return $output;
     }
 }

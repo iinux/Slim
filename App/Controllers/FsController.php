@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: qzhang
- * Date: 2019/2/7
- * Time: 7:43
- */
 
 namespace App\Controllers;
 
@@ -12,6 +6,7 @@ use App\Libs\Curl;
 use Predis\Client;
 use Slim\Http\Request;
 use Slim\Http\Response;
+use SmartyException;
 
 class FsController extends Controller
 {
@@ -19,7 +14,8 @@ class FsController extends Controller
      * @param Request $request
      * @param Response $response
      * @param $args
-     * @return mixed
+     * @return false|string|void
+     * @throws SmartyException
      */
     public function indexView($request, $response, $args)
     {

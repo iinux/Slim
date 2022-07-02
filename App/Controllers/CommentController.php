@@ -1,24 +1,18 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: nalux
- * Date: 2017/5/18
- * Time: 22:49
- */
 
 namespace App\Controllers;
-
 
 use Slim\Http\Request;
 use Slim\Http\Response;
 use App\Models\Comment;
+use SmartyException;
 
 class CommentController extends Controller
 {
     /**
      * @param Request $request
      * @param Response $response
-     * @return mixed
+     * @return Response
      */
     public function store($request, $response)
     {
@@ -32,7 +26,7 @@ class CommentController extends Controller
      * @param Request $request
      * @param Response $response
      * @param array $args
-     * @return mixed
+     * @return Response
      */
     public function update($request, $response, $args)
     {
@@ -48,7 +42,8 @@ class CommentController extends Controller
     /**
      * @param Request $request
      * @param Response $response
-     * @return mixed
+     * @return void
+     * @throws SmartyException
      */
     public function storeView($request, $response)
     {
@@ -60,14 +55,15 @@ class CommentController extends Controller
      * @param Request $request
      * @param Response $response
      * @param array $args
-     * @return mixed
+     * @return void
+     * @throws SmartyException
      */
     public function showView($request, $response, $args)
     {
         $commentId = $args['id'];
-        
+
         $comment = Comment::findOrFail($commentId);
-        
+
         $smarty = $this->getSmarty();
         $smarty->assign('id', $commentId);
         $smarty->assign('comment', $comment);

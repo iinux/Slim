@@ -1,16 +1,11 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: nalux
- * Date: 2017/5/18
- * Time: 22:49
- */
 
 namespace App\Controllers;
 
 use Slim\Http\Request;
 use Slim\Http\Response;
 use App\Models\Comment;
+use SmartyException;
 
 class IndexController extends Controller
 {
@@ -18,7 +13,8 @@ class IndexController extends Controller
      * @param Request $request
      * @param Response $response
      * @param $args
-     * @return mixed
+     * @return void
+     * @throws SmartyException
      */
     public function index($request, $response, $args)
     {
@@ -44,7 +40,7 @@ class IndexController extends Controller
      * @param Request $request
      * @param Response $response
      * @param $args
-     * @return mixed
+     * @return Response
      */
     public function testPost($request, $response, $args)
     {
@@ -56,7 +52,7 @@ class IndexController extends Controller
      * @param Request $request
      * @param Response $response
      * @param $args
-     * @return mixed
+     * @return void
      */
     public function statisticJs($request, $response, $args)
     {

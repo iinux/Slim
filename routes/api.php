@@ -22,6 +22,7 @@ $app->group('/api/science', function () use ($app) {
 
 $app->post('/api/test-post', '\App\Controllers\IndexController:testPost');
 $app->post('/api/wedding-user', '\App\Controllers\WeddingController:userStore');
+$app->post('/api/wechat/chat', '');
 
 $app->group('/api/qxw', function () use ($app) {
     $app->post('/links', '\App\Controllers\QxwController:storeLink');

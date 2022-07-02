@@ -1,15 +1,10 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: nalux
- * Date: 2017/10/9
- * Time: 16:54
- */
 
 namespace App\Controllers;
 
 use Slim\Http\Request;
 use Slim\Http\Response;
+use SmartyException;
 
 class EatController extends Controller
 {
@@ -17,11 +12,12 @@ class EatController extends Controller
     /**
      * @param Request $request
      * @param Response $response
+     * @throws SmartyException
      */
     public function which($request, $response)
     {
         $smarty = $this->getSmarty();
-        
+
         $allMain = ['米饭', '面条', '馒头'];
         $smarty->assign('allMain', $allMain);
         $smarty->assign('main', collect($allMain)->random());
@@ -31,8 +27,7 @@ class EatController extends Controller
         $allSoup = ['大米粥', '小米粥'];
         $smarty->assign('allSoup', $allSoup);
         $smarty->assign('soup', collect($allSoup)->random());
-        
-        $smarty->display('eat.tpl');
 
+        $smarty->display('eat.tpl');
     }
 }

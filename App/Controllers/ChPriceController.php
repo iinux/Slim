@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: nalux
- * Date: 2017/8/10
- * Time: 20:32
- */
 
 namespace App\Controllers;
 
@@ -14,12 +8,14 @@ use App\Models\Link;
 use App\Models\Password;
 use Slim\Http\Request;
 use Slim\Http\Response;
+use SmartyException;
 
 class ChPriceController extends Controller
 {
     /**
      * @param Request $request
      * @param Response $response
+     * @throws SmartyException
      */
     public function indexView($request, $response)
     {
@@ -34,6 +30,7 @@ class ChPriceController extends Controller
      * @param Request $request
      * @param Response $response
      * @param array $args
+     * @throws SmartyException
      */
     public function oneView($request, $response, $args)
     {

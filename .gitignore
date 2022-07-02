@@ -10,3 +10,5 @@ storage/session/sess_*
 public_html/xjs
 vendor*.zip
 qxw.zip
+Slim.iml
+composer.phar

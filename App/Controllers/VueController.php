@@ -1,15 +1,10 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: qzhang
- * Date: 2018/9/30
- * Time: 13:52
- */
 
 namespace App\Controllers;
 
 use Slim\Http\Request;
 use Slim\Http\Response;
+use SmartyException;
 
 class VueController extends Controller
 {
@@ -17,7 +12,8 @@ class VueController extends Controller
      * @param Request $request
      * @param Response $response
      * @param array $args
-     * @return mixed
+     * @return void
+     * @throws SmartyException
      */
     public function indexView($request, $response, $args)
     {

@@ -1,14 +1,12 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: nalux
- * Date: 2017/8/10
- * Time: 20:53
- */
 
 namespace App\Models;
 
-
+/**
+ * @property mixed|string|null $misc
+ * @property mixed|string|null $link
+ * @property mixed|string|null $content
+ */
 class Link extends Model
 {
 

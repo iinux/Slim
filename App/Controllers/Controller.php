@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: nalux
- * Date: 2017/5/18
- * Time: 22:49
- */
 
 namespace App\Controllers;
 
@@ -125,16 +119,16 @@ class Controller
     {
         $serverParams = $this->serverParams;
         // 如果有HTTP_X_WAP_PROFILE则一定是移动设备
-        if (isset ($serverParams['HTTP_X_WAP_PROFILE'])) {
+        if (isset($serverParams['HTTP_X_WAP_PROFILE'])) {
             return true;
         }
         // 如果via信息含有wap则一定是移动设备,部分服务商会屏蔽该信息
-        if (isset ($serverParams['HTTP_VIA'])) {
-            return stristr($serverParams['HTTP_VIA'], "wap") ? true : false;// 找不到为false,否则为true
+        if (isset($serverParams['HTTP_VIA'])) {
+            return (bool)stristr($serverParams['HTTP_VIA'], "wap");// 找不到为false,否则为true
         }
         // 判断手机发送的客户端标志,兼容性有待提高
-        if (isset ($serverParams['HTTP_USER_AGENT'])) {
-            $clientKeywords = array(
+        if (isset($serverParams['HTTP_USER_AGENT'])) {
+            $clientKeywords = [
                 'mobile',
                 'nokia',
                 'sony',
@@ -167,18 +161,22 @@ class Controller
                 'cldc',
                 'midp',
                 'wap',
-            );
+            ];
             // 从HTTP_USER_AGENT中查找手机浏览器的关键字
-            if (preg_match("/(" . implode('|', $clientKeywords) . ")/i", strtolower($serverParams['HTTP_USER_AGENT']))) {
+            if (preg_match(
+                "/(" . implode('|', $clientKeywords) . ")/i",
+                strtolower($serverParams['HTTP_USER_AGENT'])
+            )) {
                 return true;
             }
         }
-        if (isset ($serverParams['HTTP_ACCEPT'])) { // 协议法，因为有可能不准确，放到最后判断
+        if (isset($serverParams['HTTP_ACCEPT'])) { // 协议法，因为有可能不准确，放到最后判断
             $accept = $serverParams['HTTP_ACCEPT'];
             // 如果只支持wml并且不支持html那一定是移动设备
             // 如果支持wml和html但是wml在html之前则是移动设备
             if ((strpos($accept, 'vnd.wap.wml') !== false) &&
-                (strpos($accept, 'text/html') === false || strpos($accept, 'vnd.wap.wml') < strpos($accept, 'text/html'))
+                (strpos($accept, 'text/html') === false ||
+                    strpos($accept, 'vnd.wap.wml') < strpos($accept, 'text/html'))
             ) {
                 return true;
             }
@@ -300,7 +298,7 @@ class Controller
      * @param Request $request
      * @param Response $response
      * @param array $args
-     * @return mixed
+     * @return Response
      */
     public function alpha($request, $response, $args)
     {
@@ -327,7 +325,7 @@ class Controller
      * @param Request $request
      * @param Response $response
      * @param array $args
-     * @return mixed
+     * @return Response
      */
     public function beta($request, $response, $args)
     {
@@ -366,6 +364,4 @@ class Controller
             ]),
         ]);
     }
-
 }
-

@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: qzhang
- * Date: 2019/2/7
- * Time: 7:43
- */
 
 namespace App\Controllers;
 
@@ -12,6 +6,7 @@ use App\Libs\Curl;
 use Predis\Client;
 use Slim\Http\Request;
 use Slim\Http\Response;
+use SmartyException;
 
 class FmmController extends Controller
 {
@@ -30,7 +25,8 @@ class FmmController extends Controller
      * @param Request $request
      * @param Response $response
      * @param $args
-     * @return mixed
+     * @return false|string|void
+     * @throws SmartyException
      */
     public function indexView($request, $response, $args)
     {
@@ -52,7 +48,8 @@ class FmmController extends Controller
      * @param Request $request
      * @param Response $response
      * @param $args
-     * @return mixed
+     * @return false|string|void
+     * @throws SmartyException
      */
     public function anchorsView($request, $response, $args)
     {
@@ -135,7 +132,6 @@ class FmmController extends Controller
 
             return $output;
         }
-
     }
 
     protected function getData($redisKey, $postFields = "")
@@ -168,7 +164,8 @@ class FmmController extends Controller
      * @param Request $request
      * @param Response $response
      * @param $args
-     * @return mixed
+     * @return void
+     * @throws SmartyException
      */
     public function playerView($request, $response, $args)
     {

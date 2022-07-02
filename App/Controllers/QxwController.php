@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: nalux
- * Date: 2017/8/10
- * Time: 20:32
- */
 
 namespace App\Controllers;
 
@@ -13,12 +7,14 @@ use App\Models\Link;
 use App\Models\Password;
 use Slim\Http\Request;
 use Slim\Http\Response;
+use SmartyException;
 
 class QxwController extends Controller
 {
     /**
      * @param Request $request
      * @param Response $response
+     * @throws SmartyException
      */
     public function indexView($request, $response)
     {
@@ -47,7 +43,7 @@ class QxwController extends Controller
     /**
      * @param Request $request
      * @param Response $response
-     * @return mixed
+     * @return Response
      */
     public function storeLink($request, $response)
     {
@@ -63,7 +59,7 @@ class QxwController extends Controller
      * @param Request $request
      * @param Response $response
      * @param array $args
-     * @return mixed
+     * @return Response
      */
     public function updateLink($request, $response, $args)
     {
@@ -81,7 +77,7 @@ class QxwController extends Controller
     /**
      * @param Request $request
      * @param Response $response
-     * @return mixed
+     * @return Response
      */
     public function storePassword($request, $response)
     {

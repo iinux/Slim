@@ -1,14 +1,9 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: nalux
- * Date: 2017/5/23
- * Time: 21:16
- */
 
 namespace App\Controllers;
 
 use App\Models\User;
+use Exception;
 use Slim\Http\Request;
 use Slim\Http\Response;
 
@@ -18,7 +13,7 @@ class UserController extends Controller
      * @param Request $request
      * @param Response $response
      * @param array $args
-     * @return mixed
+     * @return Response
      */
     public function index($request, $response, $args)
     {
@@ -33,7 +28,7 @@ class UserController extends Controller
      * @param Request $request
      * @param Response $response
      * @param array $args
-     * @return mixed
+     * @return Response
      */
     public function store($request, $response, $args)
     {
@@ -64,7 +59,7 @@ class UserController extends Controller
      * @param Request $request
      * @param Response $response
      * @param array $args
-     * @return mixed
+     * @return Response
      */
     public function update($request, $response, $args)
     {
@@ -81,7 +76,8 @@ class UserController extends Controller
      * @param Request $request
      * @param Response $response
      * @param array $args
-     * @return mixed
+     * @return Response
+     * @throws Exception
      */
     public function destroy($request, $response, $args)
     {

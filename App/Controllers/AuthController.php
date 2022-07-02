@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: nalux
- * Date: 2017/5/23
- * Time: 21:16
- */
 
 namespace App\Controllers;
 
@@ -13,9 +7,13 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Log;
 use Slim\Http\Request;
 use Slim\Http\Response;
+use SmartyException;
 
 class AuthController extends Controller
 {
+    /**
+     * @throws SmartyException
+     */
     public function loginView()
     {
         $smarty = $this->getSmarty();
@@ -25,7 +23,8 @@ class AuthController extends Controller
     /**
      * @param Request $request
      * @param Response $response
-     * @return mixed
+     * @return Response|void
+     * @throws SmartyException
      */
     public function checkView($request, $response)
     {
@@ -58,7 +57,7 @@ class AuthController extends Controller
     /**
      * @param Request $request
      * @param Response $response
-     * @return mixed
+     * @return Response
      */
     public function logoutView($request, $response)
     {
@@ -69,7 +68,7 @@ class AuthController extends Controller
     /**
      * @param Request $request
      * @param Response $response
-     * @return mixed
+     * @return Response
      */
     public function githubOauth($request, $response)
     {
@@ -81,7 +80,7 @@ class AuthController extends Controller
     /**
      * @param Request $request
      * @param Response $response
-     * @return mixed
+     * @return Response
      */
     public function githubOauthCallback($request, $response)
     {
@@ -101,7 +100,7 @@ class AuthController extends Controller
         if (isset($error)) {
             Log::error($return);
             return $response->withStatus(403, $error);
-        } else if (isset($access_token)) {
+        } elseif (isset($access_token)) {
             $userJson = $this->curl('https://api.github.com/user?access_token=' . $access_token);
 //            $email = $this->curl('https://api.github.com/emails?access_token='.$access_token);
             $user = json_decode($userJson);
