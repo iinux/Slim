@@ -12,3 +12,4 @@ vendor*.zip
 qxw.zip
 Slim.iml
 composer.phar
+*.orig
