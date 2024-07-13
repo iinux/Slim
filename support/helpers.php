@@ -21,9 +21,7 @@ if (!function_exists('slim_app')) {
             return $container;
         }
 
-        return empty($parameters)
-            ? $container->get($abstract)
-            : $container->get($abstract);
+        return $container->get($abstract);
     }
 }
 

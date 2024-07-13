@@ -5,37 +5,39 @@
  * Time: 23:11
  */
 
-$app->group('/api/comments', function () use ($app) {
-    $app->post('', '\App\Controllers\CommentController:store');
-    $app->put('/{id}', '\App\Controllers\CommentController:update');
-    $app->post('/{id}/edit', '\App\Controllers\CommentController:update');
+use Slim\Routing\RouteCollectorProxy;
+
+$app->group('/api/comments', function (RouteCollectorProxy $group) use ($app) {
+    $group->post('', '\App\Controllers\CommentController:store');
+    $group->put('/{id}', '\App\Controllers\CommentController:update');
+    $group->post('/{id}/edit', '\App\Controllers\CommentController:update');
 })->add('mw.auth');
 
-$app->group('/api/common', function () use ($app) {
+$app->group('/api/common', function (RouteCollectorProxy $group) use ($app) {
 })->add('mw.secret-key-auth');
 
-$app->group('/api/science', function () use ($app) {
-    $app->post('/alpha', '\App\Controllers\Controller:alpha');
-    $app->post('/beta', '\App\Controllers\Controller:beta');
+$app->group('/api/science', function (RouteCollectorProxy $group) use ($app) {
+    $group->post('/alpha', '\App\Controllers\Controller:alpha');
+    $group->post('/beta', '\App\Controllers\Controller:beta');
 })->add('mw.secret-key-auth');
 
 $app->post('/api/test-post', '\App\Controllers\IndexController:testPost');
 $app->post('/api/wedding-user', '\App\Controllers\WeddingController:userStore');
 $app->get('/api/switch/{id}/{content}', '\App\Controllers\SwitchController:update');
 
-$app->group('/api/qxw', function () use ($app) {
-    $app->post('/links', '\App\Controllers\QxwController:storeLink');
-    $app->put('/links/{id}', '\App\Controllers\QxwController:updateLink');
-    $app->post('/links/{id}/edit', '\App\Controllers\QxwController:updateLink');
+$app->group('/api/qxw', function (RouteCollectorProxy $group) use ($app) {
+    $group->post('/links', '\App\Controllers\QxwController:storeLink');
+    $group->put('/links/{id}', '\App\Controllers\QxwController:updateLink');
+    $group->post('/links/{id}/edit', '\App\Controllers\QxwController:updateLink');
 
-    $app->post('/passwords', '\App\Controllers\QxwController:storePassword');
+    $group->post('/passwords', '\App\Controllers\QxwController:storePassword');
 })->add('mw.auth');
 
-$app->group('/api/users', function () use ($app) {
-    $app->post('', '\App\Controllers\UserController:store');
-    $app->get('', '\App\Controllers\UserController:index');
-    $app->put('/{id}', '\App\Controllers\UserController:update');
-    $app->post('/{id}/edit', '\App\Controllers\UserController:update');
-    $app->delete('/{id}', '\App\Controllers\UserController:destroy');
-    $app->post('/{id}/delete', '\App\Controllers\UserController:destroy');
+$app->group('/api/users', function (RouteCollectorProxy $group) use ($app) {
+    $group->post('', '\App\Controllers\UserController:store');
+    $group->get('', '\App\Controllers\UserController:index');
+    $group->put('/{id}', '\App\Controllers\UserController:update');
+    $group->post('/{id}/edit', '\App\Controllers\UserController:update');
+    $group->delete('/{id}', '\App\Controllers\UserController:destroy');
+    $group->post('/{id}/delete', '\App\Controllers\UserController:destroy');
 })->add('mw.root-auth');

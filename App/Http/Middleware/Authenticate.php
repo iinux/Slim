@@ -3,32 +3,15 @@
 namespace App\Http\Middleware;
 
 use App\Models\User;
-use Slim\Http\Request;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 use Slim\Http\Response;
+use Psr\Http\Server\MiddlewareInterface;
+use Psr\Http\Message\ResponseFactoryInterface;
 
-class Authenticate
+class Authenticate implements MiddlewareInterface
 {
-    /**
-     * @param Request $request
-     * @param Response $response
-     * @param $next
-     * @return mixed
-     */
-    public function handle($request, $response, $next)
-    {
-        if (!static::isLogin()) {
-            if ($request->getHeaderLine('X-Requested-With') == 'XMLHttpRequest') {
-                return $response->withStatus(403);
-            } else {
-                $_SESSION['intended.url'] = $request->getUri();
-                return $response->withRedirect('/auth/login');
-            }
-        }
-        $response = $next($request, $response);
-
-        return $response;
-    }
-
     public static function isLogin()
     {
         if (empty($_SESSION['user'])) {
@@ -41,5 +24,19 @@ class Authenticate
             return false;
         }
         return true;
+    }
+
+    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
+    {
+        $response = $handler->handle($request);
+        if (!static::isLogin()) {
+            if ($request->getHeaderLine('X-Requested-With') == 'XMLHttpRequest') {
+                return $response->withStatus(403);
+            } else {
+                $_SESSION['intended.url'] = $request->getUri();
+                return $response->withRedirect('/auth/login');
+            }
+        }
+        return $response;
     }
 }

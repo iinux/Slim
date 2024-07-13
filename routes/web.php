@@ -5,6 +5,9 @@
  * Time: 22:17
  */
 
+use Slim\Routing\RouteCollectorProxy;
+use App\Http\Middleware\Authenticate;
+
 $app->get('/hello/{name}', function ($request, $response, $args) {
     $response->write("Hello, " . $args['name'] . ', env: ' . env('APP_ENV'));
     return $response;
@@ -12,14 +15,14 @@ $app->get('/hello/{name}', function ($request, $response, $args) {
 
 $app->get('/statistic.js', '\App\Controllers\IndexController:statisticJs');
 
-$app->group('/comments', function () use ($app) {
-    $app->get('/add', '\App\Controllers\CommentController:storeView');
-    $app->get('/{id}', '\App\Controllers\CommentController:showView');
-})->add('mw.auth');
+$app->group('/comments', function (RouteCollectorProxy $group) use ($app) {
+    $group->get('/add', '\App\Controllers\CommentController:storeView');
+    $group->get('/{id}', '\App\Controllers\CommentController:showView');
+})->add(new Authenticate());
 
-$app->group('/operate', function () use ($app) {
-    $app->get('/pull', '\App\Controllers\OperateController:pull');
-})->add('mw.auth');
+$app->group('/operate', function (RouteCollectorProxy $group) use ($app) {
+    $group->get('/pull', '\App\Controllers\OperateController:pull');
+})->add(new Authenticate());
 
 $app->get('/auth/login', '\App\Controllers\AuthController:loginView');
 $app->get('/auth/oauth-login/github', '\App\Controllers\AuthController:githubOauth');
@@ -30,27 +33,27 @@ $app->post('/auth/check', '\App\Controllers\AuthController:checkView');
 $app->get('/search', '\App\Controllers\GoogleController:indexView');
 $app->post('/search', '\App\Controllers\GoogleController:searchView');
 
-$app->group('', function () use ($app) {
-    $app->get('/', '\App\Controllers\IndexController:index');
-    $app->get('/logs', '\App\Controllers\LogViewerController:index');
+$app->group('', function (RouteCollectorProxy $group) use ($app) {
+    $group->get('/', '\App\Controllers\IndexController:index');
+    $group->get('/logs', '\App\Controllers\LogViewerController:index');
 
-    $app->get('/complete/search', '\App\Controllers\GoogleController:completeSearch');
-    $app->get('/{proto}={domain}-images', '\App\Controllers\GoogleController:getStaticImage');
-    $app->get('/url', '\App\Controllers\GoogleController:url');
-    $app->post('/url', '\App\Controllers\GoogleController:url');
+    $group->get('/complete/search', '\App\Controllers\GoogleController:completeSearch');
+    $group->get('/{proto}={domain}-images', '\App\Controllers\GoogleController:getStaticImage');
+    $group->get('/url', '\App\Controllers\GoogleController:url');
+    $group->post('/url', '\App\Controllers\GoogleController:url');
 
-    $app->get('/trump', '\App\Controllers\TwitterController:trump');
+    $group->get('/trump', '\App\Controllers\TwitterController:trump');
 
-    $app->get('/dns', '\App\Controllers\GoogleController:dnsView');
-    $app->get('/dns-result', '\App\Controllers\GoogleController:dnsResult');
-    $app->post('/dns-result', '\App\Controllers\GoogleController:dnsResult');
+    $group->get('/dns', '\App\Controllers\GoogleController:dnsView');
+    $group->get('/dns-result', '\App\Controllers\GoogleController:dnsResult');
+    $group->post('/dns-result', '\App\Controllers\GoogleController:dnsResult');
 
-    $app->get('/fmm', '\App\Controllers\FmmController:indexView');
-    $app->get('/fmm/anchors/{name}', '\App\Controllers\FmmController:anchorsView');
-    $app->get('/fmm/player/{url:.*}', '\App\Controllers\FmmController:playerView');
+    $group->get('/fmm', '\App\Controllers\FmmController:indexView');
+    $group->get('/fmm/anchors/{name}', '\App\Controllers\FmmController:anchorsView');
+    $group->get('/fmm/player/{url:.*}', '\App\Controllers\FmmController:playerView');
 
-    $app->get('/fs', '\App\Controllers\FsController:indexView');
-})->add('mw.auth');
+    $group->get('/fs', '\App\Controllers\FsController:indexView');
+})->add(Authenticate::class);
 
 $app->get('/qxw', '\App\Controllers\QxwController:indexView');
 $app->get('/eat', '\App\Controllers\EatController:which');

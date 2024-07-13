@@ -24,7 +24,7 @@ class Controller
 
     public function __construct($container)
     {
-        $this->request = slim_app('request');
+        $this->request = slim_app('slim_request');
         $this->logRequest($this->request);
         $this->serverParams = $this->request->getServerParams();
         $this->gProxy = env('G_PROXY');

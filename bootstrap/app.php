@@ -1,13 +1,54 @@
 <?php
 
+use DI\Container;
+use Slim\Factory\AppFactory;
+use App\Http\Middleware\Authenticate;
+use Nyholm\Psr7\Factory\Psr17Factory;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
+
 require_once __DIR__.'/../support/helpers.php';
 require __DIR__.'/../vendor/autoload.php';
 
-$app = new Slim\App();
+$illuminateApp = new Illuminate\Foundation\Application(
+    realpath(__DIR__ . '/../')
+);
+$illuminateApp->singleton(
+    'Illuminate\Contracts\Http\Kernel',
+    'App\Http\Kernel'
+);
+$illuminateApp->singleton(
+    'Illuminate\Contracts\Debug\ExceptionHandler',
+    'App\Exceptions\Handler'
+);
+/**
+ * @var \App\Http\Kernel $kernel
+ */
+$kernel = $illuminateApp->make('Illuminate\Contracts\Http\Kernel');
+if (false) {
+    $response = $kernel->handle(
+        $request = Illuminate\Http\Request::capture()
+    );
+} else {
+    $request = Illuminate\Http\Request::capture();
+    $illuminateApp->instance('request', $request);
+    $kernel->bootstrap();
+}
 
+AppFactory::setContainer($illuminateApp);
+$app = AppFactory::create();
 
-$config = require_once __DIR__.'/../config/slim_config.php';
-$app->addSettings($config);
+$config = require __DIR__.'/../config/slim_config.php';
+$app->addRoutingMiddleware();
+$errorMiddleware = $app->addErrorMiddleware(true, true, true);
+$app->add(function (Request $request, RequestHandler $handler) use($illuminateApp) {
+    $illuminateApp['slim_request'] = $request;
+    $response = $handler->handle($request);
+    $response->getBody()->write('World');
+
+    return $response;
+});
 
 session_save_path(__DIR__ . '/../storage/session');
 ini_set('session.cache_expire', 0);
@@ -15,11 +56,6 @@ ini_set('session.cookie_lifetime', 0);
 session_start();
 
 $container = $app->getContainer();
-foreach ($config['routeMiddleware'] as $key => $value) {
-    $container["mw.$key"] = function () use ($value) {
-        return new $value();
-    };
-}
 
 require_once __DIR__.'/../routes/web.php';
 require_once __DIR__.'/../routes/api.php';
@@ -53,30 +89,5 @@ $capsule->setAsGlobal();
 // Setup the Eloquent ORM... (optional; unless you've used setEventDispatcher())
 $capsule->bootEloquent();
 */
-
-$illuminateApp = new Illuminate\Foundation\Application(
-    realpath(__DIR__ . '/../')
-);
-$illuminateApp->singleton(
-    'Illuminate\Contracts\Http\Kernel',
-    'App\Http\Kernel'
-);
-$illuminateApp->singleton(
-    'Illuminate\Contracts\Debug\ExceptionHandler',
-    'App\Exceptions\Handler'
-);
-/**
- * @var \App\Http\Kernel $kernel
- */
-$kernel = $illuminateApp->make('Illuminate\Contracts\Http\Kernel');
-if (false) {
-    $response = $kernel->handle(
-        $request = Illuminate\Http\Request::capture()
-    );
-} else {
-    // $request = Illuminate\Http\Request::capture();
-    // $illuminateApp->instance('request', $request);
-    $kernel->bootstrap();
-}
 
 $app->run();
