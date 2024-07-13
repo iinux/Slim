@@ -10,12 +10,9 @@ declare(strict_types=1);
 
 namespace Slim\Interfaces;
 
-interface CallableResolverInterface
+use Throwable;
+
+interface ErrorRendererInterface
 {
-    /**
-     * Resolve $toResolve into a callable
-     *
-     * @param string|callable $toResolve
-     */
-    public function resolve($toResolve): callable;
+    public function __invoke(Throwable $exception, bool $displayErrorDetails): string;
 }

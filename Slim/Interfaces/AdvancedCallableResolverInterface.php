@@ -10,12 +10,19 @@ declare(strict_types=1);
 
 namespace Slim\Interfaces;
 
-interface CallableResolverInterface
+interface AdvancedCallableResolverInterface extends CallableResolverInterface
 {
     /**
      * Resolve $toResolve into a callable
      *
      * @param string|callable $toResolve
      */
-    public function resolve($toResolve): callable;
+    public function resolveRoute($toResolve): callable;
+
+    /**
+     * Resolve $toResolve into a callable
+     *
+     * @param string|callable $toResolve
+     */
+    public function resolveMiddleware($toResolve): callable;
 }

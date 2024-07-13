@@ -10,12 +10,6 @@ declare(strict_types=1);
 
 namespace Slim\Interfaces;
 
-interface CallableResolverInterface
+interface RequestHandlerInvocationStrategyInterface extends InvocationStrategyInterface
 {
-    /**
-     * Resolve $toResolve into a callable
-     *
-     * @param string|callable $toResolve
-     */
-    public function resolve($toResolve): callable;
 }
