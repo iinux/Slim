@@ -37,8 +37,9 @@
         "smarty/smarty": "*",
         "rap2hpoutre/laravel-log-viewer": "*",
         "laravel/framework": "5.4.*",
+        "swiftmailer/swiftmailer": "~5.4",
         "predis/predis": "*",
-      "ext-json": "*",
+        "ext-json": "*",
         "ext-curl": "*"
     },
     "require-dev": {
@@ -61,11 +62,5 @@
         ],
         "phpunit": "php vendor/bin/phpunit",
         "phpcs": "php vendor/bin/phpcs"
-    },
-    "repositories": {
-        "packagist": {
-            "type": "composer",
-            "url": "https://packagist.phpcomposer.com"
-        }
     }
 }

@@ -68,6 +68,7 @@ class GoogleController extends Controller
     {
         $q = $request->getParam('q');
         if (!empty($q)) {
+            return $response->withRedirect("https://www.bing.com/search?q=$q");
             return $response->withRedirect("https://www.baidu.com/s?wd=$q");
         }
         $q = str_replace(' ', '+', $q);

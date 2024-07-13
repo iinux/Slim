@@ -19,7 +19,8 @@ class ChPriceController extends Controller
      */
     public function indexView($request, $response)
     {
-        $chPrices = ChPrice::where('status', ChPrice::STATUS_NEW)->orderBy('date', 'asc')->get();
+        $chPrices = ChPrice::where('status', ChPrice::STATUS_NEW)->orderBy('date', 'desc')
+            ->get();
         $smarty = $this->getSmarty();
         $smarty->assign('chPrices', $chPrices);
 
