@@ -4,7 +4,7 @@ namespace App\Controllers;
 
 use App\Libs\Curl;
 use App\Libs\RemoteCurl;
-use Smarty;
+use Smarty\Smarty;
 use Slim\Http\Request;
 use Slim\Http\Response;
 use Psr\Http\Message\ServerRequestInterface;

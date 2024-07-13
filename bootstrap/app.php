@@ -1,6 +1,5 @@
 <?php
 
-use DI\Container;
 use Slim\Factory\AppFactory;
 use App\Http\Middleware\Authenticate;
 use Nyholm\Psr7\Factory\Psr17Factory;
