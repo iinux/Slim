@@ -41,10 +41,11 @@ $app = AppFactory::create();
 $config = require __DIR__.'/../config/slim_config.php';
 $app->addRoutingMiddleware();
 $errorMiddleware = $app->addErrorMiddleware(true, true, true);
-$app->add(function (Request $request, RequestHandler $handler) use($illuminateApp) {
+$app->add(function (Request $request, RequestHandler $handler) use($illuminateApp, $app) {
     $illuminateApp['slim_request'] = $request;
+    $illuminateApp['slim_app'] = $app;
     $response = $handler->handle($request);
-    $response->getBody()->write('World');
+//    $response->getBody()->write('World');
 
     return $response;
 });

@@ -2,15 +2,15 @@
 
 namespace App\Controllers;
 
-use Slim\Http\Request;
+use Psr\Http\Message\ServerRequestInterface;
 use Slim\Http\Response;
 use App\Models\Comment;
-use SmartyException;
+use Smarty\Exception as SmartyException;
 
 class CommentController extends Controller
 {
     /**
-     * @param Request $request
+     * @param ServerRequestInterface $request
      * @param Response $response
      * @return Response
      */
@@ -23,7 +23,7 @@ class CommentController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param ServerRequestInterface $request
      * @param Response $response
      * @param array $args
      * @return Response
@@ -40,22 +40,23 @@ class CommentController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param ServerRequestInterface $request
      * @param Response $response
-     * @return void
+     * @return Response
      * @throws SmartyException
      */
     public function storeView($request, $response)
     {
         $smarty = $this->getSmarty();
         $smarty->display('comments_add.tpl');
+        return $response;
     }
 
     /**
-     * @param Request $request
+     * @param ServerRequestInterface $request
      * @param Response $response
      * @param array $args
-     * @return void
+     * @return Response
      * @throws SmartyException
      */
     public function showView($request, $response, $args)
@@ -68,5 +69,6 @@ class CommentController extends Controller
         $smarty->assign('id', $commentId);
         $smarty->assign('comment', $comment);
         $smarty->display('comments_edit.tpl');
+        return $response;
     }
 }

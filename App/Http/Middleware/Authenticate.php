@@ -28,8 +28,8 @@ class Authenticate implements MiddlewareInterface
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        $response = $handler->handle($request);
         if (!static::isLogin()) {
+            $response = slim_app('slim_app')->getResponseFactory()->createResponse();
             if ($request->getHeaderLine('X-Requested-With') == 'XMLHttpRequest') {
                 return $response->withStatus(403);
             } else {
@@ -37,6 +37,7 @@ class Authenticate implements MiddlewareInterface
                 return $response->withRedirect('/auth/login');
             }
         }
+        $response = $handler->handle($request);
         return $response;
     }
 }
