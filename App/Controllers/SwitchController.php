@@ -3,7 +3,7 @@
 namespace App\Controllers;
 
 use Predis\Client;
-use Slim\Http\Request;
+use Slim\Http\ServerRequest;
 use Slim\Http\Response;
 
 class SwitchController extends Controller
@@ -17,7 +17,7 @@ class SwitchController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param ServerRequest $request
      * @param Response $response
      * @param array $args
      * @return Response

@@ -2,14 +2,14 @@
 
 namespace App\Controllers;
 
-use Slim\Http\Request;
+use Slim\Http\ServerRequest;
 use Slim\Http\Response;
 
 class OperateController extends Controller
 {
 
     /**
-     * @param Request $request
+     * @param ServerRequest $request
      * @param Response $response
      * @param array $args
      * @return void

@@ -2,18 +2,18 @@
 
 namespace App\Controllers;
 
-use Slim\Http\Request;
+use Slim\Http\ServerRequest;
 use Slim\Http\Response;
 use App\Models\Comment;
-use SmartyException;
+use Smarty\Exception as SmartyException;
 
 class IndexController extends Controller
 {
     /**
-     * @param Request $request
+     * @param ServerRequest $request
      * @param Response $response
      * @param $args
-     * @return void
+     * @return Response
      * @throws SmartyException
      */
     public function index($request, $response, $args)
@@ -34,10 +34,11 @@ class IndexController extends Controller
         $smarty->assign('shuffleUri', $shuffleUri);
         $smarty->assign('comments', $comments);
         $smarty->display('comments.tpl');
+        return $response;
     }
 
     /**
-     * @param Request $request
+     * @param ServerRequest $request
      * @param Response $response
      * @param $args
      * @return Response
@@ -49,14 +50,15 @@ class IndexController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param ServerRequest $request
      * @param Response $response
      * @param $args
-     * @return void
+     * @return Response
      */
     public function statisticJs($request, $response, $args)
     {
         $response->write("console.log('welcome');");
+        return $response;
     }
 
 }

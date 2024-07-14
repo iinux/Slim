@@ -5,14 +5,14 @@ namespace App\Controllers;
 use App\Http\Middleware\Authenticate;
 use App\Models\Link;
 use App\Models\Password;
-use Slim\Http\Request;
+use Slim\Http\ServerRequest;
 use Slim\Http\Response;
-use SmartyException;
+use Smarty\Exception as SmartyException;
 
 class QxwController extends Controller
 {
     /**
-     * @param Request $request
+     * @param ServerRequest $request
      * @param Response $response
      * @throws SmartyException
      */
@@ -38,10 +38,11 @@ class QxwController extends Controller
         }
 
         $smarty->display('qxw.tpl');
+        return $response;
     }
 
     /**
-     * @param Request $request
+     * @param ServerRequest $request
      * @param Response $response
      * @return Response
      */
@@ -56,7 +57,7 @@ class QxwController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param ServerRequest $request
      * @param Response $response
      * @param array $args
      * @return Response
@@ -75,7 +76,7 @@ class QxwController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param ServerRequest $request
      * @param Response $response
      * @return Response
      */

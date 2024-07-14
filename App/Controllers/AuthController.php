@@ -5,25 +5,26 @@ namespace App\Controllers;
 use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Log;
-use Slim\Http\Request;
+use Slim\Http\ServerRequest;
 use Slim\Http\Response;
-use SmartyException;
+use Smarty\Exception as SmartyException;
 
 class AuthController extends Controller
 {
     /**
      * @throws SmartyException
      */
-    public function loginView()
+    public function loginView($request, $response)
     {
         $smarty = $this->getSmarty();
         $smarty->display('login.tpl');
+        return $response;
     }
 
     /**
-     * @param Request $request
+     * @param ServerRequest $request
      * @param Response $response
-     * @return Response|void
+     * @return Response
      * @throws SmartyException
      */
     public function checkView($request, $response)
@@ -52,10 +53,11 @@ class AuthController extends Controller
             $smarty->assign('errors', ['ident or password error']);
             $smarty->display('login.tpl');
         }
+        return $response;
     }
 
     /**
-     * @param Request $request
+     * @param ServerRequest $request
      * @param Response $response
      * @return Response
      */
@@ -66,7 +68,7 @@ class AuthController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param ServerRequest $request
      * @param Response $response
      * @return Response
      */
@@ -78,7 +80,7 @@ class AuthController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param ServerRequest $request
      * @param Response $response
      * @return Response
      */

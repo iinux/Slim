@@ -6,14 +6,14 @@ use App\Http\Middleware\Authenticate;
 use App\Models\ChPrice;
 use App\Models\Link;
 use App\Models\Password;
-use Slim\Http\Request;
+use Slim\Http\ServerRequest;
 use Slim\Http\Response;
-use SmartyException;
+use Smarty\Exception as SmartyException;
 
 class ChPriceController extends Controller
 {
     /**
-     * @param Request $request
+     * @param ServerRequest $request
      * @param Response $response
      * @throws SmartyException
      */
@@ -25,10 +25,11 @@ class ChPriceController extends Controller
         $smarty->assign('chPrices', $chPrices);
 
         $smarty->display('ch_price.tpl');
+        return $response;
     }
 
     /**
-     * @param Request $request
+     * @param ServerRequest $request
      * @param Response $response
      * @param array $args
      * @throws SmartyException
@@ -53,5 +54,6 @@ class ChPriceController extends Controller
         $smarty->assign('chartData', json_encode($chartData));
 
         $smarty->display('ch_price_one.tpl');
+        return $response;
     }
 }

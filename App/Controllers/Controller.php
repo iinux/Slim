@@ -5,7 +5,7 @@ namespace App\Controllers;
 use App\Libs\Curl;
 use App\Libs\RemoteCurl;
 use Smarty\Smarty;
-use Slim\Http\Request;
+use Slim\Http\ServerRequest;
 use Slim\Http\Response;
 use Psr\Http\Message\ServerRequestInterface;
 use Illuminate\Http\Request as IlluminateRequest;
@@ -13,7 +13,7 @@ use Illuminate\Http\Request as IlluminateRequest;
 class Controller
 {
     /**
-     * @var Request $request
+     * @var ServerRequest $request
      */
     protected $illuminateRequest;
     protected $request;
@@ -33,7 +33,7 @@ class Controller
     }
 
     /**
-     * @param Request|ServerRequestInterface $request
+     * @param ServerRequestInterface $request
      * @param string $appendMessage
      */
     public static function logRequest($request, $appendMessage = '')
@@ -295,7 +295,7 @@ class Controller
     }
 
     /**
-     * @param Request $request
+     * @param ServerRequest $request
      * @param Response $response
      * @param array $args
      * @return Response
@@ -322,7 +322,7 @@ class Controller
     }
 
     /**
-     * @param Request $request
+     * @param ServerRequest $request
      * @param Response $response
      * @param array $args
      * @return Response

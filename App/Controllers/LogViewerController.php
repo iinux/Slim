@@ -2,7 +2,7 @@
 namespace App\Controllers;
 
 use Exception;
-use Slim\Http\Request;
+use Slim\Http\ServerRequest;
 use Slim\Http\Response;
 use Rap2hpoutre\LaravelLogViewer\LaravelLogViewer;
 
@@ -17,7 +17,7 @@ class LogViewerController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param ServerRequest $request
      * @param Response $response
      * @param array $args
      * @return mixed

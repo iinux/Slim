@@ -2,10 +2,9 @@
 
 namespace App\Controllers;
 
-use Slim\Http\Message;
-use Slim\Http\Request;
+use Slim\Http\ServerRequest;
 use Slim\Http\Response;
-use SmartyException;
+use Smarty\Exception as SmartyException;
 
 class GoogleController extends Controller
 {
@@ -18,17 +17,17 @@ class GoogleController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param ServerRequest $request
      * @param Response $response
      * @param array $args
-     * @return void
+     * @return Response
      * @throws SmartyException
      */
     public function indexView($request, $response, $args)
     {
         if (count($request->getParams()) >= 1) {
             $response->write($this->curlGoogle(http_build_query($request->getParams()), $request->getUri()->getPath()));
-            return;
+            return $response;
         }
         $smarty = $this->getSmarty();
         $smarty->assign('title', 'SearchEngine');
@@ -42,14 +41,14 @@ class GoogleController extends Controller
             $smarty->assign('headerTitle', 'Perorsoft Search Engine(PHP Version)');
             $smarty->display('google_index.tpl');
         }
-        return;
+        return $response;
     }
 
     /**
-     * @param Request $request
+     * @param ServerRequest $request
      * @param Response $response
      * @param array $args
-     * @return Response|Message
+     * @return Response
      */
     public function completeSearch($request, $response, $args)
     {
@@ -59,10 +58,10 @@ class GoogleController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param ServerRequest $request
      * @param Response $response
      * @param array $args
-     * @return Response|void
+     * @return Response
      */
     public function searchView($request, $response, $args)
     {
@@ -75,18 +74,19 @@ class GoogleController extends Controller
         $response->write($this->curlGoogle('q=' . $q));
         // test use baidu
         // $response->write($this->curlGoogle('wd=' . $q, '/s'));
+        return $response;
     }
 
     /**
-     * @param Request $request
+     * @param ServerRequest $request
      * @param Response $response
      * @param array $args
-     * @return void
+     * @return Response
      */
     public function null($request, $response, $args)
     {
         $response->write('null');
-        return;
+        return $response;
     }
 
     protected function curlGoogle($queryString, $uriPath = '/search')
@@ -117,10 +117,10 @@ class GoogleController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param ServerRequest $request
      * @param Response $response
      * @param array $args
-     * @return mixed
+     * @return Response
      */
     public function url($request, $response, $args)
     {
@@ -144,7 +144,7 @@ class GoogleController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param ServerRequest $request
      * @param Response $response
      * @param array $args
      * @return Response
@@ -160,10 +160,10 @@ class GoogleController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param ServerRequest $request
      * @param Response $response
      * @param array $args
-     * @return Message|Response
+     * @return Response
      */
     public function getStaticImage($request, $response, $args)
     {
@@ -189,10 +189,10 @@ class GoogleController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param ServerRequest $request
      * @param Response $response
      * @param array $args
-     * @return Message|Response
+     * @return Response
      */
     public function xjs($request, $response, $args)
     {
@@ -211,10 +211,10 @@ class GoogleController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param ServerRequest $request
      * @param Response $response
      * @param array $args
-     * @return Message|Response
+     * @return Response
      */
     public function dnsResult($request, $response, $args)
     {
@@ -226,10 +226,10 @@ class GoogleController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param ServerRequest $request
      * @param Response $response
      * @param array $args
-     * @return void
+     * @return Response
      * @throws SmartyException
      */
     public function dnsView($request, $response, $args)
@@ -245,6 +245,7 @@ class GoogleController extends Controller
         } else {
             $smarty->display('google_index.tpl');
         }
+        return $response;
     }
 
     public function hideImg()
@@ -256,11 +257,11 @@ class GoogleController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param ServerRequest $request
      * @param $file
      * @return false|mixed|string
      */
-    public function getOutput(Request $request, $file)
+    public function getOutput(ServerRequest $request, $file)
     {
         $url = $this->gDomain . $request->getUri()->getPath();
 

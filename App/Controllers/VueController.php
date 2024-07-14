@@ -2,24 +2,24 @@
 
 namespace App\Controllers;
 
-use Slim\Http\Request;
+use Slim\Http\ServerRequest;
 use Slim\Http\Response;
-use SmartyException;
+use Smarty\Exception as SmartyException;
 
 class VueController extends Controller
 {
     /**
-     * @param Request $request
+     * @param ServerRequest $request
      * @param Response $response
      * @param array $args
-     * @return void
+     * @return Response
      * @throws SmartyException
      */
     public function indexView($request, $response, $args)
     {
         $smarty = $this->getSmarty();
         $smarty->display('vue.tpl');
-        return;
+        return $response;
     }
 
 }

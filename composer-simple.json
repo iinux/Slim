@@ -1,0 +1,26 @@
+{
+    "name": "iinux/slim",
+    "description": "iinux slim",
+    "require": {
+        "php": "~8.0.0",
+        "slim/slim": "^4.0",
+        "laravel/framework": "^9.0",
+        "ext-pdo": "*"
+    },
+    "authors": [
+        {
+            "name": "iinux",
+            "email": "iinux@qq.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "App\\": "App"
+        }
+    },
+    "config": {
+        "allow-plugins": {
+            "kylekatarnls/update-helper": true
+        }
+    }
+}

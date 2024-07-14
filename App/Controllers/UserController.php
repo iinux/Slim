@@ -4,13 +4,13 @@ namespace App\Controllers;
 
 use App\Models\User;
 use Exception;
-use Slim\Http\Request;
+use Slim\Http\ServerRequest;
 use Slim\Http\Response;
 
 class UserController extends Controller
 {
     /**
-     * @param Request $request
+     * @param ServerRequest $request
      * @param Response $response
      * @param array $args
      * @return Response
@@ -25,7 +25,7 @@ class UserController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param ServerRequest $request
      * @param Response $response
      * @param array $args
      * @return Response
@@ -73,7 +73,7 @@ class UserController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param ServerRequest $request
      * @param Response $response
      * @param array $args
      * @return Response

@@ -2,15 +2,15 @@
 
 namespace App\Controllers;
 
-use Slim\Http\Request;
+use Slim\Http\ServerRequest;
 use Slim\Http\Response;
-use SmartyException;
+use Smarty\Exception as SmartyException;
 
 class EatController extends Controller
 {
 
     /**
-     * @param Request $request
+     * @param ServerRequest $request
      * @param Response $response
      * @throws SmartyException
      */

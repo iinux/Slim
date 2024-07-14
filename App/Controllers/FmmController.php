@@ -42,6 +42,7 @@ class FmmController extends Controller
         $smarty = $this->getSmarty();
         $smarty->assign('lists', $outputObj->data->lists);
         $smarty->display('fmm.tpl');
+        return $response;
     }
 
     /**
@@ -64,6 +65,7 @@ class FmmController extends Controller
         $smarty = $this->getSmarty();
         $smarty->assign('lists', $outputObj->data->lists);
         $smarty->display('fmm_anchors.tpl');
+        return $response;
     }
 
     protected function getToken()
@@ -176,5 +178,6 @@ class FmmController extends Controller
         } else {
             $smarty->display('fmm_player.tpl');
         }
+        return $response;
     }
 }
