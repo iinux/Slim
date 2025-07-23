@@ -166,7 +166,7 @@
         </form>
     </div>
 
-    <p class="footer">@{date('Y')} Perorsoft</p>
+    <p class="footer">@{$smarty.now|date_format:"%Y"} Perorsoft</p>
 </div>
 {include 'google_script.tpl'}
 {if $dns }

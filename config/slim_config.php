@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'displayErrorDetails'               => true,
+    'displayErrorDetails'               => false,
     //'routerCacheFile'                   => __DIR__ . '/../bootstrap/cache/routes.php',
     'routerCacheFile'                   => false,
     'httpVersion'                       => '1.1',

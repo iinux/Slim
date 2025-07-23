@@ -62,6 +62,21 @@ class QxwController extends Controller
      * @param array $args
      * @return Response
      */
+    public function getLinkContent($request, $response, $args)
+    {
+        /**
+         * @var Link $link
+         */
+        $link = Link::findOrFail($args['id']);
+        return $response->write($link->content);
+    }
+
+    /**
+     * @param ServerRequest $request
+     * @param Response $response
+     * @param array $args
+     * @return Response
+     */
     public function updateLink($request, $response, $args)
     {
         /**

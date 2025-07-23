@@ -29,6 +29,7 @@ $app->get('/api/switch/{id}/{content}', '\App\Controllers\SwitchController:updat
 $app->group('/api/qxw', function (RouteCollectorProxy $group) use ($app) {
     $group->post('/links', '\App\Controllers\QxwController:storeLink');
     $group->put('/links/{id}', '\App\Controllers\QxwController:updateLink');
+    $group->get('/links/{id}/content', '\App\Controllers\QxwController:getLinkContent');
     $group->post('/links/{id}/edit', '\App\Controllers\QxwController:updateLink');
 
     $group->post('/passwords', '\App\Controllers\QxwController:storePassword');

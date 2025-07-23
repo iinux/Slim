@@ -40,7 +40,7 @@ $app = AppFactory::create();
 
 $config = require __DIR__.'/../config/slim_config.php';
 $app->addRoutingMiddleware();
-$errorMiddleware = $app->addErrorMiddleware(true, true, true);
+$errorMiddleware = $app->addErrorMiddleware(env('APP_DEBUG'), env('APP_DEBUG'), env('APP_DEBUG'));
 $app->add(function (Request $request, RequestHandler $handler) use($illuminateApp, $app) {
     $illuminateApp['slim_request'] = $request;
     $illuminateApp['slim_app'] = $app;

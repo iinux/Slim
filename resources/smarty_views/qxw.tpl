@@ -237,14 +237,14 @@
                 {foreach $links as $link}
                     <tr>
                         {*<td>{$link->id}</td>*}
-                        <td title="{$link->updated_at}">{date('Y-m-d', strtotime($link->updated_at))}</td>
+                        <td title="{$link->updated_at}">{$link->updated_at}</td>
                         <td>{$link->ip}</td>
                         {if strlen($link->content) > 30 }
                             <td title="{$link->content}">{$link->content|truncate:30:"...":TRUE}</td>
                         {else}
                             <td>{$link->content}</td>
                         {/if}
-                        {if strpos($link->link, 'http') === 0 }
+                        {if $link->link|substr:0:4 == 'http'}
                             <td><a class="button" href="{$link->link}" target="_blank">链接</a></td>
                         {else}
                             <td>
@@ -282,7 +282,7 @@
                 {foreach $passwords as $password}
                     <tr>
                         {*<td>{$password->id}</td>*}
-                        <td title="{$password->updated_at}">{date('Y-m-d', strtotime($password->updated_at))}</td>
+                        <td title="{$password->updated_at}">{$password->updated_at}</td>
                         <td>{$password->ip}</td>
                         <td>{$password->password}</td>
                         <td>{$password->misc}</td>
